@@ -1,0 +1,4 @@
+modify the service page by creating seperate components for banner and logo
+update the free trail google maps
+work on maps
+popup should be mounted on seperate portals
