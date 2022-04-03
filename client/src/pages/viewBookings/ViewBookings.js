@@ -39,17 +39,18 @@ const BookingDetailsPage = styled.div`
 const Container = styled.div`
   @media (min-width: 35rem) {
     display: flex;
+    align-items: center;
     width: 80%;
-    max-width: 1150px;
+    max-width: 1400px;
     margin: atuto atuto;
-    padding-top: 7rem;
+    padding-top: 12rem;
   }
   margin: auto auto;
   /* border: 1px solid black; */
 `;
 
 const ContainerLeft = styled.div`
-  flex: 0.5;
+  flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -60,7 +61,7 @@ const ContainerLeft = styled.div`
 
 const logoStyle = {
   flex: "1",
-  width: "60%",
+  width: "50%",
   "@media (max-width: 35rem)": {
     width: "60%",
   },

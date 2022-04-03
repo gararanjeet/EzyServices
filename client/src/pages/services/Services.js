@@ -1,6 +1,6 @@
 // Modifications
 //should try to render these components from json file
-import React from "react";
+import React, { useEffect } from "react";
 import NavBar from "../../components/navBar/NavBar";
 import ServiceBanner from "../../components/serviceBanner/ServiceBanner";
 import ServiceLogo from "../../components/serviceLogo/ServiceLogo";
@@ -13,15 +13,26 @@ function Services() {
   const toggle = () => {
     setformVisible(!formVisible);
   };
+
+  // useEffect(() => {
+  //   const visible = window.localStorage.getItem("visible");
+  //   setformVisible(JSON.parse(visible));
+  // }, []);
+
+  // useEffect(() => {
+  //   window.localStorage.setItem("visible", JSON.stringify(formVisible));
+  // }, [formVisible]);
+
   return (
     <ServicesPage>
       {/* <NavBar /> */}
       <Container>
         <ContainerLeft>
           <ServiceLogo style={logoStyle}></ServiceLogo>
-          {!formVisible ? <Button onClick={toggle}>Book Now</Button> : null}
+          {/* {!formVisible ? <Button onClick={toggle}>Book Now</Button> : null} */}
         </ContainerLeft>
-        {!formVisible ? <ServiceBanner></ServiceBanner> : <WaterServiceForm />}
+        {/* {!formVisible ? <ServiceBanner></ServiceBanner> : <WaterServiceForm />} */}
+        <WaterServiceForm></WaterServiceForm>
       </Container>
     </ServicesPage>
   );
@@ -42,23 +53,19 @@ const ServicesPage = styled.div`
 `;
 
 const Container = styled.div`
-  max-width: 1150px;
-  width: 80%;
-  margin: auto auto;
-  padding-top: 3rem;
+  max-width: 1400px;
   @media (min-width: 35rem) {
     display: flex;
-    margin: 0 auto;
-    padding-top: 4rem;
+    margin: auto auto;
+    padding-top: 10rem;
+    width: 80%;
   }
+  padding-top: 5rem;
 `;
 
 const logoStyle = {
   flex: "1",
-  width: "50%",
-  "@media (max-width: 35rem)": {
-    width: "60%",
-  },
+  width: "70%",
 };
 
 const Button = styled.button`
@@ -83,8 +90,9 @@ const ContainerLeft = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  /* border: 1px solid black; */
+  margin-top: -5rem;
   @media (max-width: 35rem) {
     margin-bottom: 3rem;
+    padding: 3rem;
   }
 `;

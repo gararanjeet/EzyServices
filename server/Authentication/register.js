@@ -1,11 +1,9 @@
-const db = require("./db");
+const db = require("../db");
 const bcrypt = require("bcrypt");
 const saltRounds = 10;
 
 const register = (req, res) => {
-  const { username, email, phone, password } = req.body;
-  const type = "CUSTOMER";
-  const user = "USER";
+  const { username, email, phone, password, type, role } = req.body;
 
   db.db.query(
     "SELECT * FROM account where email = ?",
@@ -14,19 +12,19 @@ const register = (req, res) => {
       if (err)
         return res
           .status(500)
-          .send({ message: "Error in serving the request" });
+          .send({ err: err, message: "Error in serving the request" });
       if (result.length > 0)
         return res.status(400).send({ message: "User Exists" });
       else {
         bcrypt.hash(password, saltRounds, (err, hash) => {
           db.db.query(
             "INSERT INTO  account (user_name, email, password, phone, type, role) values (?, ?, ?, ?, ?, ?)",
-            [username, email, hash, phone, type, user],
+            [username, email, hash, phone, type, role],
             (err, result) => {
               if (err)
                 return res
                   .status(500)
-                  .send({ message: "Error in serving the request" });
+                  .send({ err : err});
               else return res.send({ message: "success" });
             }
           );

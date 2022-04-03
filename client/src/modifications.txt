@@ -1,4 +1,12 @@
 modify the service page by creating seperate components for banner and logo
+
 update the free trail google maps
+
 work on maps
+
 popup should be mounted on seperate portals
+
+should implement the login using contexts 
+refer this video : https://www.youtube.com/watch?v=S2_vHMM34Fo
+
+should add validations in waterservicing form

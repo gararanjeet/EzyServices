@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import NavBar from "../../components/navBar/NavBar";
 import styled from "styled-components";
 import ServiceBanner from "../../components/serviceBanner/ServiceBanner";
@@ -11,18 +11,22 @@ function Home() {
       {/* <NavBar /> */}
       <Container>
         <ServiceLogos>
-          <Link to="/waterservices" style={linkStyle}>
-            <ServiceLogo style={LogoStyle}></ServiceLogo>
-          </Link>
-          <Link to="/waterservices" style={linkStyle}>
-            <ServiceLogo style={LogoStyle}></ServiceLogo>
-          </Link>
-          <Link to="/waterservices" style={linkStyle}>
-            <ServiceLogo style={LogoStyle}></ServiceLogo>
-          </Link>
-          <Link to="/waterservices" style={linkStyle}>
-            <ServiceLogo style={LogoStyle}></ServiceLogo>
-          </Link>
+          <Row className="row">
+            <Link to="/waterservices" style={linkStyle}>
+              <ServiceLogo style={LogoStyle}></ServiceLogo>
+            </Link>
+            <Link to="/waterservices" style={linkStyle}>
+              <ServiceLogo style={LogoStyle}></ServiceLogo>
+            </Link>
+            <Link to="/waterservices" style={linkStyle}>
+              <ServiceLogo style={LogoStyle}></ServiceLogo>
+            </Link>
+          </Row>
+          <Row>
+            <Link to="/waterservices" className="image-link" style={linkStyle}>
+              <ServiceLogo style={LogoStyle}></ServiceLogo>
+            </Link>
+          </Row>
         </ServiceLogos>
         <ServiceCarasoul>
           <ServiceBanner></ServiceBanner>
@@ -36,7 +40,8 @@ export default Home;
 const HomePage = styled.div`
   height: calc(100% - 5.3rem);
   background: rgb(255, 255, 255);
-  border: 1px solid black;
+  display: flex;
+  justify-content: center;
   background: linear-gradient(
     0deg,
     rgba(255, 255, 255, 1) 0%,
@@ -49,44 +54,45 @@ const HomePage = styled.div`
 const Container = styled.div`
   @media (min-width: 35rem) {
     display: flex;
-    width: 80%;
-    max-width: 1150px;
-    margin-top: 5rem;
+    width: 90%;
+    max-width: 1400px;
+    margin-top: 9rem;
   }
+  height: fit-content;
+  width: 90%;
   margin: auto auto;
   margin-top: 3rem;
 `;
 const LogoStyle = {
-  // maxHeight: "15rem",
-  height: "100%",
+  width: "100%",
   flexShrink: "1",
+  // border: "1px solid black",
+  "&hover": {
+    border: "1px solid black",
+  },
 };
+
+const Row = styled.div`
+  display: flex;
+  justify-content: space-around;
+  max-width: 100%;
+  align-items: center;
+  flex-shrink: 1;
+  aspect-ratio: 4/2;
+  margin-bottom: 3rem;
+`;
 
 const ServiceLogos = styled.div`
   flex: 1;
-  text-align: center;
-  flex-wrap: wrap;
-  display: flex;
-  /* flex-grow: 1 1 0;
-  flex-shrink: 1 1 0; */
-  border: 1px solid black;
-  /* justify-content: space-around;
-  align-items: center; */
 `;
 
 const ServiceCarasoul = styled.div`
   flex: 1;
   display: flex;
-  padding-top: 3rem;
 `;
 
 const linkStyle = {
   textdecoration: "none",
-  maxHeight: "15rem",
-  width: "auto",
-  flexShrink: "1",
-  flexGrow: "1",
-  padding: "20px",
-  // width: "300px",
-  // height: "auto",
+  // height: "100%",
+  width: "30%",
 };

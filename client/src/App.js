@@ -4,20 +4,19 @@ import Home from "./pages/home/Home";
 import NavBar from "./components/navBar/NavBar";
 import Services from "./pages/services/Services";
 import ViewBookings from "./pages/viewBookings/ViewBookings";
-import { AuthContextProvide } from "./context/AuthContext";
+import Footer from "./components/footer/Footer";
 
 function App() {
   return (
-    <AuthContextProvide>
-      <Router>
-        <NavBar></NavBar>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/waterservices" element={<Services />} />
-          <Route path="/viewbookings" element={<ViewBookings />} />
-        </Routes>
-      </Router>
-    </AuthContextProvide>
+    <Router>
+      <NavBar></NavBar>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/waterservices" element={<Services />} />
+        <Route path="/viewbookings" element={<ViewBookings />} />
+      </Routes>
+      <Footer></Footer>
+    </Router>
   );
 }
 

@@ -1,4 +1,5 @@
 import React, { useContext, useState } from "react";
+import { useCookies } from "react-cookie";
 import styled from "styled-components";
 import GoogleAuth from "../googleAuth/GoogleAuth";
 import { Form, Formik, ErrorMessage, Field } from "formik";
@@ -7,7 +8,19 @@ import AuthContext from "../../context/AuthContext";
 
 function LoginModal({ Open }) {
   const [error, setError] = useState("");
-  const { getLoggedIn } = useContext(AuthContext);
+  // const { getLoggedIn } = useContext(AuthContext);
+  const [cookie, setCookie] = useCookies(["accessToken"]);
+
+  const updateCookie = (key, value) => {
+    let expires = new Date();
+    expires.setTime(expires.getTime() + 86400000);
+    setCookie(key, value, {
+      path: "/",
+      expires,
+      // httpOnly: true,
+      // hostOnly: false,
+    });
+  };
   return (
     <LoginPopup>
       <Formik
@@ -15,8 +28,12 @@ function LoginModal({ Open }) {
         onSubmit={(values) => {
           onSubmit(values)
             .then((res) => {
-              console.log(res);
-              getLoggedIn();
+              const { id, type, user_name, accessToken } = res.data;
+              console.log(id);
+              updateCookie("id", id);
+              updateCookie("type", type);
+              updateCookie("user_name", user_name);
+              updateCookie("accessToken", accessToken);
               Open(false);
             })
             .catch((err) => {

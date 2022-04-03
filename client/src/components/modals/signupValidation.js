@@ -11,6 +11,8 @@ const initialValues = {
 };
 
 const onSubmit = (values) => {
+  values.type = "CUSTOMER";
+  values.role = "USER";
   return axios.post("/register", values);
 };
 

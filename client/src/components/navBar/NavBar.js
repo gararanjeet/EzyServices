@@ -8,17 +8,23 @@ import { Link } from "react-router-dom";
 import Modal from "react-modal";
 import SignupModal from "../modals/SignupModal";
 import LoginModal from "../modals/LoginModal";
-import Notify from "../modals/Notify";
-import styles from "../modals/notifycss";
-import AuthContext from "../../context/AuthContext";
+import { useCookies } from "react-cookie";
+// import AuthContext from "../../context/AuthContext";
 
 function NavBar() {
   const [hidden, setHidden] = useState(true);
   const [width, setWidth] = useState(window.innerWidth);
-  const [dropdown, setDropdown] = useState(false);
   const [LoginPopup, setLoginPopup] = useState(false);
   const [SignupPopup, setSignupPopup] = useState(false);
-  const { loginStatus } = useContext(AuthContext);
+  // const { loginStatus } = useContext(AuthContext);
+  const [cookie, setCookie, removeCookie] = useCookies();
+
+  const deleteCookies = () => {
+    removeCookie("id");
+    removeCookie("user_name");
+    removeCookie("type");
+    removeCookie("accessToken");
+  };
 
   const toggle = () => {
     setHidden(!hidden);
@@ -26,11 +32,6 @@ function NavBar() {
 
   const updateWidth = () => {
     setWidth(window.innerWidth);
-  };
-
-  const toggleDropDown = () => {
-    setDropdown((dropdown) => !dropdown);
-    console.log(dropdown);
   };
 
   useEffect(() => {
@@ -66,16 +67,23 @@ function NavBar() {
             <NavItems>
               <NavItem>Services</NavItem>
               <NavItem>Contact Us</NavItem>
-              {!loginStatus.loggedIn && (
+              {!cookie.id ? (
                 <>
                   <NavItem onClick={() => setLoginPopup(true)}>Log in</NavItem>
                   <NavItem onClick={() => setSignupPopup(true)}>
                     Sign Up
                   </NavItem>
                 </>
-              )}
-              {loginStatus.loggedIn === true && loginStatus.type === "USER" && (
-                <NavItem>Booking Status</NavItem>
+              ) : (
+                <>
+                  <NavItem>
+                    <Link to="/viewBookings" style={linkStyle}>
+                      Booking Status
+                    </Link>
+                  </NavItem>
+
+                  <NavItem onClick={deleteCookies}>Logout</NavItem>
+                </>
               )}
             </NavItems>
           )}
@@ -106,7 +114,7 @@ const Nav = styled.div`
   background-color: #565656;
 `;
 const NavContent = styled.div`
-  max-width: 1150px;
+  max-width: 1400px;
   width: 90%;
   margin: 0 auto;
   justify-content: space-between;
@@ -173,6 +181,7 @@ const NavItem = styled.div`
     margin: auto 0;
   }
 `;
+
 const ModalStyle = {
   overlay: {
     position: "fixed",
@@ -191,5 +200,13 @@ const ModalStyle = {
     outline: "none",
     padding: "20px",
     transition: "1s easy",
+  },
+};
+
+const linkStyle = {
+  textDecoration: "none",
+  color: "white",
+  ":hover": {
+    color: "#565656",
   },
 };

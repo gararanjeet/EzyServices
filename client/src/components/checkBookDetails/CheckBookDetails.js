@@ -57,12 +57,13 @@ const Lable = styled.div`
 
 const Input = styled.input`
   margin-left: 1rem;
-  font-size: 1rem;
-  width: 50%;
+  font-size: 1.5rem;
+  width: 60%;
   border: none;
   background: #c1c1c1;
-  border-bottom: 2px solid black;
   padding: 0.5em;
+  margin-bottom: 2rem;
+  text-align: center;
   :focus {
     outline: none;
   }
@@ -75,9 +76,9 @@ const Button = styled.button`
   background-color: #565656;
   border: none;
   color: #d5d421;
-  font-size: 1rem;
+  font-size: 2rem;
   font-weight: bolder;
-  padding: 0.5em;
+  padding: 0.5em 1em;
   border-radius: 200px;
   margin-top: 1em;
   :hover {

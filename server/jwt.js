@@ -9,16 +9,21 @@ const createToken = (user) => {
   return accessToken;
 };
 
-const validateToke = (req, res, next) => {
-  const accessToken = req.cookies["access-token"];
-  if (!accessToken) return res.status(400).json("Access Denied");
+const verifySuperAdmin = (req, res, next) => {
+  const { accessToken } = req.body;
+  if (!accessToken) return res.status(400).send("AccessDenied");
   try {
-    const validToke = verify(accessToken, "ItAJWTScreat");
-    if (validToke) req.authenticated = true;
-    return next();
+    const validToken = verify(accessToken, process.env.ACCESS_TOKEN_SCRET);
+    if (validToken.type === "MANAGER" && validToken.role === "SUPER_ADMIN") {
+      console.log(validToken);
+      return next();
+    }
+    console.log(validToken);
+    return res.status(400).send("AccessDenied");
   } catch (error) {
-    return res.status(400).json(error);
+    return res.status(400).send(error);
   }
+  next();
 };
 
-module.exports = { createToken, validateToke };
+module.exports = { createToken, verifySuperAdmin };
