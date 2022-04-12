@@ -12,6 +12,7 @@ function ViewBookings() {
         <Container>
           <ContainerLeft>
             <ServiceLogo style={logoStyle} logo={logo}></ServiceLogo>
+            <Button>All Bookings</Button>
           </ContainerLeft>
           <CheckBookDetails></CheckBookDetails>
         </Container>
@@ -56,6 +57,22 @@ const ContainerLeft = styled.div`
   align-items: center;
   @media (max-width: 35rem) {
     margin-bottom: 3rem;
+  }
+`;
+
+const Button = styled.button`
+  background-color: #565656;
+  border: none;
+  color: #d5d421;
+  font-size: 2rem;
+  font-weight: bolder;
+  padding: 0.5em 1em;
+  border-radius: 200px;
+  margin-top: 1em;
+  :hover {
+    cursor: pointer;
+    background-color: #d5d421;
+    color: #565656;
   }
 `;
 

@@ -3,7 +3,7 @@ import axios from "../axios";
 const initialValues = { email: "", password: "" };
 
 const onSubmit = (values) => {
-  return axios.post("/login", values);
+  return axios.post("/authenticate/login", values);
 };
 
 const validationSchema = yup.object({

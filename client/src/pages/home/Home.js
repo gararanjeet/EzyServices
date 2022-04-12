@@ -79,7 +79,7 @@ const Row = styled.div`
   align-items: center;
   flex-shrink: 1;
   aspect-ratio: 4/2;
-  margin-bottom: 3rem;
+  margin-bottom: 2.5em;
 `;
 
 const ServiceLogos = styled.div`
