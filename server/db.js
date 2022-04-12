@@ -1,9 +1,11 @@
 const mysql = require("mysql2");
+require("dotenv").config();
+
 const db = mysql.createConnection({
-  user: "root",
-  host: "localhost",
-  password: "1234",
-  database: "ezyservices",
+  user: process.env.DB_USER,
+  host: process.env.DB_HOST,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
 });
 
 db.connect((err) => {
