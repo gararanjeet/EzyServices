@@ -10,3 +10,5 @@ should implement the login using contexts
 refer this video : https://www.youtube.com/watch?v=S2_vHMM34Fo
 
 should add validations in waterservicing form
+
+add render on delete and update to table component!!!!

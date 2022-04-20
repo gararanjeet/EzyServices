@@ -3,6 +3,7 @@ import ServiceLogo from "../../components/serviceLogo/ServiceLogo";
 import CheckBookDetails from "../../components/checkBookDetails/CheckBookDetails";
 import logo from "../../images/bookingLogo.svg";
 import styled from "styled-components";
+import { Outlet, Link } from "react-router-dom";
 
 function ViewBookings() {
   const [showBookings, setShowBookings] = useState(false);
@@ -12,7 +13,9 @@ function ViewBookings() {
         <Container>
           <ContainerLeft>
             <ServiceLogo style={logoStyle} logo={logo}></ServiceLogo>
-            <Button>All Bookings</Button>
+            <Link to="/allBookings">
+              <Button>All Bookings</Button>
+            </Link>
           </ContainerLeft>
           <CheckBookDetails></CheckBookDetails>
         </Container>

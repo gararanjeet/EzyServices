@@ -1,4 +1,4 @@
-const db = require("../db");
+const db = require("../../db");
 const bcrypt = require("bcrypt");
 const saltRounds = 10;
 
@@ -21,10 +21,7 @@ const register = (req, res) => {
             "INSERT INTO  account (user_name, email, password, phone, type, role) values (?, ?, ?, ?, ?, ?)",
             [username, email, hash, phone, type, role],
             (err, result) => {
-              if (err)
-                return res
-                  .status(500)
-                  .send({ err : err});
+              if (err) return res.status(500).send({ err: err });
               else return res.send({ message: "success" });
             }
           );

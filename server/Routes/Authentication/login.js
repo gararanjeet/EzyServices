@@ -1,6 +1,6 @@
-const db = require("../db");
+const db = require("../../db");
 const bcrypt = require("bcrypt");
-const { createToken } = require("../jwt");
+const { createToken } = require("../../jwt");
 
 const login = (req, res) => {
   const { email, password } = req.body;

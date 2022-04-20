@@ -1,4 +1,4 @@
-const { db } = require("../db");
+const { db } = require("../../db");
 
 const freeSlots = (req, resp) => {
   console.log(req.body);

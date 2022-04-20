@@ -4,9 +4,13 @@ import GoogleAuth from "../googleAuth/GoogleAuth";
 import { Form, Formik, Field, ErrorMessage } from "formik";
 import { initialValues, onSubmit, validationSchema } from "./signupValidation";
 
-function SignupModal({ Open }) {
+function SignupModal({ Open, registerServiceProvider }) {
   const [submitError, setSubmitError] = useState("");
-
+  //Changing the initial values for service provider registration
+  if (registerServiceProvider) {
+    initialValues.type = "";
+    initialValues.role = "";
+  }
   return (
     <LoginPopup>
       <Formik
@@ -27,13 +31,13 @@ function SignupModal({ Open }) {
         validationSchema={validationSchema}
       >
         <Form style={{ textAlign: "center" }}>
-          <Heading>Sign Up </Heading>
-          {submitError.length > 0 && <p>{submitError}</p>}
-          <GoogleAuth
+          <Heading>Register</Heading>
+          {/* {submitError.length > 0 && <p>{submitError}</p>} */}
+          {/* <GoogleAuth
             body="Signup with Google"
             open={Open}
             type="register"
-          ></GoogleAuth>
+          ></GoogleAuth> */}
           <Lable>UserName</Lable>
           <ErrorMessage name="username" />
           <Field name="username" type="text" style={styleInput} />
@@ -49,6 +53,24 @@ function SignupModal({ Open }) {
           <Lable>Confirm Password</Lable>
           <ErrorMessage name="confirmPassword" />
           <Field name="confirmPassword" type="password" style={styleInput} />
+          {registerServiceProvider ? (
+            <>
+              <Lable>Type</Lable>
+              <ErrorMessage name="type" />
+              <Field name="type" component="select" style={styleInput}>
+                <option>select</option>
+                <option value="SERVICE_PROVIDER">Service Provider</option>
+              </Field>
+              <Lable>Role</Lable>
+              <ErrorMessage name="role" />
+              <Field component="select" name="role" style={styleInput}>
+                <option>select</option>
+                <option value="VEHICLE_WATER_SERVICING">Vehicle_Water</option>
+                {/* <option value="Doctor">Doctor</option>
+                <option value="House Keeping">Keeping</option> */}
+              </Field>
+            </>
+          ) : null}
           <Submit type="submit">Register</Submit>
         </Form>
       </Formik>
@@ -70,7 +92,7 @@ const Heading = styled.h1`
 `;
 
 const Lable = styled.label`
-  font-size: 1rem;
+  font-size: 1.2rem;
   margin-left: 1.5em;
   text-align: left;
   display: block;
@@ -79,7 +101,7 @@ const Lable = styled.label`
 
 const styleInput = {
   display: "block",
-  fontSize: "1rem",
+  fontSize: "1.2rem",
   padding: "0.5em",
   color: "#d5d421",
   width: "85%",

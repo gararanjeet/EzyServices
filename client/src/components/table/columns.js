@@ -1,3 +1,4 @@
+import styled from "styled-components";
 export const COLUMNS = [
   {
     Header: "ID",
@@ -16,7 +17,20 @@ export const COLUMNS = [
     accessor: "email",
   },
   {
-    Header: "Gender",
-    accessor: "gender",
+    Header: "Phone",
+    accessor: "phone",
+  },
+  {
+    Header: "Send Tender",
+    width: 125,
+    accessor: "tender_list",
+    style: {
+      cursor: "pointer",
+    },
+    Cell: ({ row }) => <Button onClick={console.log(row)}>Click me </Button>,
   },
 ];
+
+const Button = styled.button`
+  background-color: red;
+`;

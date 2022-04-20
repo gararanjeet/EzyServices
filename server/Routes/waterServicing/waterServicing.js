@@ -1,6 +1,7 @@
 const express = require("express");
-const { getServiceProviders } = require("../getServiceProviders");
-const { verifySuperAdmin } = require("../jwt");
+const { getServiceProviders } = require("../../getServiceProviders");
+const { verifySuperAdmin } = require("../../Controlers/VerifySuperAdmin");
+const { verifyCustomer } = require("../../Controlers/VerifyCustomer");
 const { booking } = require("./booking");
 const { bookingDetails } = require("./bookingDetails");
 const { freeSlots } = require("./freeSlots");
@@ -12,7 +13,7 @@ waterServicing.post("/booking", booking);
 
 waterServicing.post("/freeSlots", freeSlots);
 
-waterServicing.post("/bookingDetails", bookingDetails);
+waterServicing.get("/bookingDetails", bookingDetails);
 
 waterServicing.get(
   "/getServiceProviders",

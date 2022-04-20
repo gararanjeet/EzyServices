@@ -16,7 +16,7 @@ ALTER TABLE `booking` ADD `sub_service_id` BIGINT NOT NULL AFTER `service_id`;
 
 ALTER TABLE `booking` ADD FOREIGN KEY (`sub_service_id`) REFERENCES `sub_service`(`id`) ON DELETE RESTRICT ON UPDATE RESTRICT; 
 
-ALTER TABLE `booking` CHANGE `status` `status` ENUM('pending','assigned','completed','winthdrawn') CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL; 
+ALTER TABLE `booking` CHANGE `status` `status` ENUM('pending','completed','withdrawn') CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL; 
 
 ALTER TABLE `booking` ADD `name` VARCHAR(120) NOT NULL AFTER `account_id`, ADD `phone_no` VARCHAR(10) NOT NULL AFTER `name`, ADD `mail` VARCHAR(120) NOT NULL AFTER `phone_no`; 
 

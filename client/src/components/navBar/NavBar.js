@@ -65,24 +65,31 @@ function NavBar() {
             ))}
           {(!hidden || width > 560) && (
             <NavItems>
-              <NavItem>Services</NavItem>
-              <NavItem>Contact Us</NavItem>
+              <Link to="/contact" style={linkStyle}>
+                <NavItem>Contact Us</NavItem>
+              </Link>
               {!cookie.id ? (
                 <>
-                  <NavItem onClick={() => setLoginPopup(true)}>Log in</NavItem>
-                  <NavItem onClick={() => setSignupPopup(true)}>
-                    Sign Up
-                  </NavItem>
+                  <Link to="" style={linkStyle}>
+                    <NavItem onClick={() => setLoginPopup(true)}>
+                      Log in
+                    </NavItem>
+                  </Link>
+                  <Link to="" style={linkStyle}>
+                    <NavItem onClick={() => setSignupPopup(true)}>
+                      Sign Up
+                    </NavItem>
+                  </Link>
                 </>
               ) : (
                 <>
-                  <NavItem>
-                    <Link to="/viewBookings" style={linkStyle}>
-                      Booking Status
-                    </Link>
-                  </NavItem>
+                  <Link to="/viewBookings" style={linkStyle}>
+                    <NavItem>Booking Status</NavItem>
+                  </Link>
 
-                  <NavItem onClick={deleteCookies}>Logout</NavItem>
+                  <Link to="" style={linkStyle}>
+                    <NavItem onClick={deleteCookies}>Logout</NavItem>
+                  </Link>
                 </>
               )}
             </NavItems>
@@ -159,6 +166,7 @@ const CloseMenu = styled.div`
 const NavItems = styled.div`
   @media (min-width: 35rem) {
     display: flex;
+    align-items: center;
   }
 `;
 
@@ -168,7 +176,6 @@ const NavItem = styled.div`
   padding: 0.4em;
   color: white;
   margin: auto 0;
-  margin-right: 0.5em;
   border-radius: 0.4rem;
   :hover {
     background-color: #d5d421;
@@ -206,6 +213,10 @@ const ModalStyle = {
 const linkStyle = {
   textDecoration: "none",
   color: "white",
+  // border: "1px solid black",
+  height: "fit-content",
+  width: "fit-content",
+  marginRight: "0.5em",
   ":hover": {
     color: "#565656",
   },

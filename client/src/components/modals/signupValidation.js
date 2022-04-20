@@ -2,18 +2,19 @@ import axios from "../axios";
 import * as yup from "yup";
 require("yup-phone");
 
-const initialValues = {
+let initialValues = {
   username: "",
   email: "",
   phone: "",
   password: "",
   confirmPassword: "",
+  role: "USER",
+  type: "COUSTMER",
 };
 
 const onSubmit = (values) => {
-  values.type = "CUSTOMER";
-  values.role = "USER";
-  return axios.post("/register", values);
+  console.log(values);
+  return axios.post("/authenticate/register", values);
 };
 
 const validationSchema = yup.object({
@@ -33,6 +34,8 @@ const validationSchema = yup.object({
     .string()
     .oneOf([yup.ref("password"), null], "Passwords must match")
     .required("required"),
+  type: yup.string().required("type is required"),
+  role: yup.string().required("role is required"),
 });
 
 export { initialValues, onSubmit, validationSchema };
