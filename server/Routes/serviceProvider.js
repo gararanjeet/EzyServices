@@ -2,12 +2,12 @@ const express = require("express");
 
 const {
   serviceProvider_list,
-} = require("../Controlers/ServiceProviders/ServiceProvider");
+} = require("../Controlers/ServiceProviders/list");
 
 const {
   serviceProvider_delete,
-} = require("../Controlers/ServiceProviders/DeleteServiceProvider");
-const { assign } = require("../Controlers/ServiceProviders/Assign");
+} = require("../Controlers/ServiceProviders/delete");
+const { assign } = require("../Controlers/ServiceProviders/assign");
 
 const ServiceProvider = express.Router();
 

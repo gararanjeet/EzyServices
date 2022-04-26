@@ -2,11 +2,11 @@ const express = require("express");
 
 const {
   booking_vehicleWaterService_create,
-} = require("../Controlers/Bookings/booking");
+} = require("../Controlers/Bookings/vehicleWaterService_create");
 
-const { bookings_list_user } = require("../Controlers/Bookings/bookingDetails");
+const { bookings_list_user } = require("../Controlers/Bookings/list_user");
 
-const { bookings_list } = require("../Controlers/Bookings/GetBookings");
+const { bookings_list } = require("../Controlers/Bookings/list");
 
 const Bookings = express.Router();
 
