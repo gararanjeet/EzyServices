@@ -13,13 +13,14 @@ function ManagementCard({ logo, text }) {
 export default ManagementCard;
 
 const Card = styled.div`
-  height: fit-content;
+  height: 17rem;
   text-align: center;
   background-color: white;
   box-shadow: 0 0 1.5rem #0000ff;
   border-radius: 1rem;
   padding: 2rem;
   margin: 2rem;
+  width: 17rem;
   :hover {
     transform: scale(1.03);
     transition: 0.1s ease;

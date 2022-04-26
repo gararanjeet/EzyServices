@@ -11,4 +11,8 @@ refer this video : https://www.youtube.com/watch?v=S2_vHMM34Fo
 
 should add validations in waterservicing form
 
-add render on delete and update to table component!!!!
+add render on delete and update to table component!!!! solve this using Usecontext hook !!!
+solved it using reloading the page !!! should come up with better approach.
+
+implement transaction from following link
+https://knowledgeacademy.io/node-js-mysql-transaction/

@@ -38,7 +38,7 @@ function WaterServiceForm() {
     console.log(data);
     data.user_id = cookie.id;
     axios
-      .post("/bookWaterServicing", data)
+      .post("/Booking/vehicleWaterService_create", data)
       .then((res) => {
         console.log(res);
         setsubmitted(true);
@@ -57,7 +57,7 @@ function WaterServiceForm() {
       if (date === "" || !date) return;
       // date = date.toString();
       console.log(date);
-      axios.post("/freeslots", { date: date }).then((res) => {
+      axios.post("/FreeSlots/waterServicing", { date: date }).then((res) => {
         console.log(res.data);
         setOptions(res.data);
       });

@@ -9,7 +9,7 @@ function AllBookings() {
     console.log("called");
     const fetchBookings = async () => {
       const bookings = await axios
-        .get("/waterServicing/bookingDetails")
+        .get("/Booking/list_user")
         .catch((err) => console.log(err));
       setData(bookings.data);
     };
@@ -43,16 +43,18 @@ const AllBooking = styled.div`
 
 const Container = styled.div`
   @media (min-width: 35rem) {
+    height: fit-content;
+    width: 90%;
+    margin: auto auto;
+    margin-top: 3rem;
+    width: min(90%, 1400px);
+    max-width: 1400px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    border: 1px solid black;
+    flex-wrap: wrap;
   }
-  height: fit-content;
-  width: 90%;
-  margin: auto auto;
-  margin-top: 3rem;
-  width: 90%;
-  max-width: 1400px;
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 10px;
   @media only screen and (min-width: 600px) {
     grid-template-columns: repeat(2, 1fr);
     gap: 10px;

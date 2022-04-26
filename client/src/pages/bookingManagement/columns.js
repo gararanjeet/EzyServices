@@ -1,17 +1,10 @@
 import styled from "styled-components";
+import Div from "../../components/modals/JobCard";
 
 export const COLUMNS = [
   {
     Header: "Booking id",
     accessor: "booking_uid",
-  },
-  {
-    Header: "Name",
-    accessor: "name",
-  },
-  {
-    Header: "Phone",
-    accessor: "phone",
   },
   {
     Header: "Address",
@@ -33,6 +26,7 @@ export const COLUMNS = [
     Header: "Status",
     accessor: "status",
   },
+
 ];
 
 const Button = styled.button`

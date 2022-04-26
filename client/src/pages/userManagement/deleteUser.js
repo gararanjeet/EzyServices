@@ -1,6 +1,6 @@
 import axios from "../../components/axios";
 const deleteUser = (id) => {
-  axios.delete("/Admin/deleteServiceProvider/", { data: { id } });
+  axios.delete("/ServiceProvider/delete", { data: { id } });
   return true;
 };
 
@@ -11,6 +11,7 @@ const onDelete = (cells) => {
   } else {
     alert("Unable to Delete");
   }
+  window.location.reload();
 };
 
 export { onDelete };

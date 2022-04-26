@@ -1,19 +1,57 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import { useTable, usePagination } from "react-table";
 // import { COLUMNS } from "./columns";
 // import MOCK_DATA from "./MOCK_DATA.json";
 import styled from "styled-components";
 // import { createPath } from "react-router-dom";
 
-export const Table = ({ COLUMNS, DATA }) => {
-  const columns = useMemo(() => COLUMNS, []);
+export const Table = ({
+  COLUMNS,
+  DATA,
+  ViewDetails,
+  setShowDetails,
+  setDetailsId,
+  setAssignment,
+}) => {
+  const columns = useMemo(() => COLUMNS, [COLUMNS]);
   const data = useMemo(() => DATA, [DATA]);
+
+  const setpopup = (row, assign) => {
+    setShowDetails(true);
+    setDetailsId(row.cells[0].value);
+    assign && setAssignment(true);
+  };
+
+  const tableHooks = (hooks) => {
+    hooks.visibleColumns.push((columns) => [
+      ...columns,
+      {
+        id: "View",
+        Header: "View",
+        Cell: ({ row }) => <Button onClick={() => setpopup(row)}>View</Button>,
+      },
+      {
+        Header: "Action",
+        style: {
+          zindex: "100",
+        },
+        Cell: ({ row }) => {
+          if (row.values.status.toLowerCase() === "pending")
+            return <Button onClick={() => setpopup(row, true)}>Assign</Button>;
+          else if (row.values.status.toLowerCase() === "completed")
+            return <Button disabled={true}>Assign</Button>;
+          else return null;
+        },
+      },
+    ]);
+  };
 
   const tableInstance = useTable(
     {
       columns,
       data,
     },
+    ViewDetails === true && tableHooks,
     usePagination
   );
 
@@ -66,9 +104,9 @@ export const Table = ({ COLUMNS, DATA }) => {
         </TableBody>
       </TableCompo>
       <Pagination>
-        <Button onClick={previousPage} disabled={!canPreviousPage}>
+        <NavButton onClick={previousPage} disabled={!canPreviousPage}>
           Previous
-        </Button>
+        </NavButton>
         <span>
           {" "}
           Page{" "}
@@ -76,9 +114,9 @@ export const Table = ({ COLUMNS, DATA }) => {
             {pageIndex + 1} of {pageOptions.length}
           </strong>{" "}
         </span>
-        <Button onClick={nextPage} disabled={!canNextPage}>
+        <NavButton onClick={nextPage} disabled={!canNextPage}>
           Next
-        </Button>
+        </NavButton>
       </Pagination>
     </>
   );
@@ -119,5 +157,16 @@ const Pagination = styled.div`
 
 const Button = styled.button`
   font-size: 1.2rem;
-  padding: 0.5rem 1rem;
+  padding: 0.2rem 0.5rem;
+  background-color: #64dfdf;
+  border: none;
+  border-radius: 0.2rem;
+  :hover {
+    cursor: pointer;
+  }
+`;
+
+const NavButton = styled.button`
+  font-size: 1.2rem;
+  padding: 0.5rem;
 `;

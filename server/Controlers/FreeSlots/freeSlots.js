@@ -1,5 +1,6 @@
 const { db } = require("../../db");
 
+//get_free_waterServicing_slots_per_day
 const freeSlots = (req, resp) => {
   console.log(req.body);
   let date = req.body.date;
@@ -23,6 +24,3 @@ const freeSlots = (req, resp) => {
 };
 
 module.exports = { freeSlots };
-
-// query for getting free slots (slots which are booked less than 2)
-// select slot.start from slot LEFT join (select * from booking where service_date = '2022-03-30') AS t1 on t1.slot_id = slot.id group by slot.id HAVING COUNT(slot.id) < 2 ORDER BY slot.start

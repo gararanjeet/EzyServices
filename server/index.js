@@ -2,9 +2,11 @@ const express = require("express");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 
-const { authenticate } = require("./Routes/Authentication/authenticate.js");
-const { waterServicing } = require("./Routes/waterServicing/waterServicing.js");
-const { Admin } = require("./Routes/Admin/Admin.js");
+const { authenticate } = require("./Routes/authenticate.js");
+const { Bookings } = require("./Routes/bookings.js");
+const { ServiceProvider } = require("./Routes/serviceProvider.js");
+const { FreeSlots } = require("./Routes/freeSlots.js");
+const { Services } = require("./Routes/services.js");
 
 require("dotenv").config();
 const app = express();
@@ -15,9 +17,14 @@ app.use(cors());
 
 app.use("/authenticate", authenticate);
 
-app.use("/waterServicing", waterServicing);
+app.use("/Booking", Bookings);
 
-app.use("/Admin", Admin);
+app.use("/ServiceProvider", ServiceProvider);
+
+app.use("/FreeSlot", FreeSlots);
+
+app.use("/Service", Services);
+
 
 app.listen(8000, () => {
   console.log("Servere is running");

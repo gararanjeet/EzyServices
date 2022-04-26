@@ -13,6 +13,10 @@ function UserManagement() {
   const [filterBy, setFilterBy] = useState("");
   const [filteredData, setFilteredData] = useState([]);
 
+  const funct = () => {
+    console.log("hello");
+  };
+
   useEffect(() => {
     console.log("value changed", filterBy);
     if (filterBy === "") setFilteredData(data);
@@ -22,7 +26,7 @@ function UserManagement() {
   useEffect(() => {
     const fetchData = async () => {
       const result = await axios
-        .get("/Admin/serviceProviders", [])
+        .get("/ServiceProvider/list", [])
         .catch((err) => console.log(err));
       setData(result.data);
       setFilteredData(result.data);

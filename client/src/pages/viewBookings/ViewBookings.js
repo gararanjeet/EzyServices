@@ -3,7 +3,7 @@ import ServiceLogo from "../../components/serviceLogo/ServiceLogo";
 import CheckBookDetails from "../../components/checkBookDetails/CheckBookDetails";
 import logo from "../../images/bookingLogo.svg";
 import styled from "styled-components";
-import { Outlet, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 function ViewBookings() {
   const [showBookings, setShowBookings] = useState(false);

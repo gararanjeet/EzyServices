@@ -17,10 +17,16 @@ function OwnerHome() {
               text="User Manangement"
             ></ManagementCard>
           </Link>
-          <ManagementCard
-            logo={bookingLogo}
-            text="Booking Manangement"
-          ></ManagementCard>
+          <Link
+            to="/bookingManagement"
+            className="image-link"
+            style={linkStyle}
+          >
+            <ManagementCard
+              logo={bookingLogo}
+              text="Booking Manangement"
+            ></ManagementCard>
+          </Link>
           <ManagementCard
             logo={serviceLogo}
             text="Service Manangement"

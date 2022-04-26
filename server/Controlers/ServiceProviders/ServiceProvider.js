@@ -1,6 +1,6 @@
 const { db } = require("../../db");
-
-const allServiceProviders = (req, res) => {
+//serviceProvider_list
+const serviceProvider_list = (req, res) => {
   db.query(
     "SELECT id, user_name, email, phone, role FROM `account` WHERE type = ? AND state = ?",
     ["SERVICE_PROVIDER", 1],
@@ -11,4 +11,4 @@ const allServiceProviders = (req, res) => {
   );
 };
 
-module.exports = { allServiceProviders };
+module.exports = { serviceProvider_list };
