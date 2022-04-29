@@ -3,6 +3,6 @@ const { freeSlots } = require("../Controlers/FreeSlots/freeSlots");
 
 FreeSlots = express.Router();
 
-FreeSlots.get("/waterServicing", freeSlots);
+FreeSlots.post("/waterServicing", freeSlots);
 
 module.exports = { FreeSlots };

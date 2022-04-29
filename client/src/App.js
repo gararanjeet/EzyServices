@@ -38,7 +38,7 @@ function App() {
           <Route path="/serviceRequests" />
         </Route> */}
         <Route element={<RequireAuth allowed={"manager"} />}>
-          <Route path="/ownerhome" element={<OwnerHome />} />
+          <Route path="/owner" element={<OwnerHome />} />
           <Route path="/userManagement" element={<UserManagement />} />
           <Route path="/bookingManagement" element={<BookingManagement />} />
         </Route>

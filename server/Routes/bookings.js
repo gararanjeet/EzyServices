@@ -10,8 +10,6 @@ const { bookings_list } = require("../Controlers/Bookings/list");
 
 const Bookings = express.Router();
 
-
-
 Bookings.get("/list", bookings_list);
 
 Bookings.post(

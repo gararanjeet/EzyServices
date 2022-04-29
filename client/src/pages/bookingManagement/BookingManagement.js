@@ -59,6 +59,7 @@ function BookingManagement() {
   return (
     <BookingManagementPage>
       <Container>
+        <Title>Booking Management</Title>
         <AccessBar>
           <Label>
             Date
@@ -135,6 +136,14 @@ const Container = styled.div`
   height: 100%;
   width: 90%;
   margin: auto auto;
+`;
+
+const Title = styled.h1`
+  margin-top: 3rem;
+  text-align: center;
+  font-size: 3rem;
+  font-weight: 800;
+  color: #565656;
 `;
 
 const AccessBar = styled.div`

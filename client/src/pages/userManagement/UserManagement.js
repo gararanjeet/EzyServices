@@ -47,6 +47,7 @@ function UserManagement() {
   return (
     <UserManangementPage>
       <Container>
+        <Title>User Management</Title>
         <AccessBar>
           <Input onChange={(e) => setFilterBy(e.target.value)}>
             <option value={""}>All</option>
@@ -99,6 +100,14 @@ const Container = styled.div`
   width: 90%;
   margin: auto auto;
   /* margin-top: 3rem; */
+`;
+
+const Title = styled.h1`
+  margin-top: 3rem;
+  text-align: center;
+  font-size: 3rem;
+  font-weight: 800;
+  color: #565656;
 `;
 
 const AccessBar = styled.div`

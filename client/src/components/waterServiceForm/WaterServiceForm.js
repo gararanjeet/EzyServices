@@ -57,7 +57,7 @@ function WaterServiceForm() {
       if (date === "" || !date) return;
       // date = date.toString();
       console.log(date);
-      axios.post("/FreeSlots/waterServicing", { date: date }).then((res) => {
+      axios.post("/FreeSlot/waterServicing", { date: date }).then((res) => {
         console.log(res.data);
         setOptions(res.data);
       });
