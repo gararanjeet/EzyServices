@@ -10,6 +10,13 @@ import OwnerHome from "./pages/ownerHome/OwnerHome";
 import UserManagement from "./pages/userManagement/UserManagement";
 import BookingManagement from "./pages/bookingManagement/BookingManagement";
 import Contact from "./pages/contact/Contact";
+import {
+  PartialUserAuth,
+  RequireAuth,
+  UserAuth,
+} from "./components/requireAuth/RequireAuth";
+import { ManagerAuth } from "./components/requireAuth/RequireAuth";
+import ServiceRequest from "./pages/serviceRequest/ServiceRequest";
 
 function App() {
   return (
@@ -18,12 +25,23 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/waterservices" element={<Services />} />
-        <Route path="/viewbookings" element={<ViewBookings />} />
-        <Route path="/allbookings" element={<AllBookings />}></Route>
-        <Route path="/owner" element={<OwnerHome />} />
-        <Route path="/userManagement" element={<UserManagement />} />
-        <Route path="/bookingManagement" element={<BookingManagement />} />
         <Route path="/contact" element={<Contact />} />
+
+        {/* for test  */}
+        <Route path="/serviceRequests" element={<ServiceRequest />} />
+
+        <Route element={<RequireAuth allowed={"user"} />}>
+          <Route path="/viewbookings" element={<ViewBookings />} />
+          <Route path="/allbookings" element={<AllBookings />}></Route>
+        </Route>
+        {/* <Route element={<RequireAuth allowed={"serviceProvider"} />}>
+          <Route path="/serviceRequests" />
+        </Route> */}
+        <Route element={<RequireAuth allowed={"manager"} />}>
+          <Route path="/ownerhome" element={<OwnerHome />} />
+          <Route path="/userManagement" element={<UserManagement />} />
+          <Route path="/bookingManagement" element={<BookingManagement />} />
+        </Route>
       </Routes>
       <Footer></Footer>
     </Router>

@@ -1,26 +1,30 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
 import styled from "styled-components";
 import GoogleAuth from "../googleAuth/GoogleAuth";
 import { Form, Formik, ErrorMessage, Field } from "formik";
 import { initialValues, onSubmit, validationSchema } from "./loginValidatoin";
-import AuthContext from "../../context/AuthContext";
+import { useNavigate, Navigate, useHistory } from "react-router-dom";
 
 function LoginModal({ Open }) {
+  const navigate = useNavigate();
+  // const history = useHistory();
   const [error, setError] = useState("");
-  // const { getLoggedIn } = useContext(AuthContext);
   const [cookie, setCookie] = useCookies(["accessToken"]);
-
-  const updateCookie = (key, value) => {
+  const updateCookie = (props) => {
     let expires = new Date();
     expires.setTime(expires.getTime() + 86400000);
-    setCookie(key, value, {
-      path: "/",
-      expires,
-      // httpOnly: true,
-      // hostOnly: false,
+    Object.keys(props).forEach((item) => {
+      setCookie(item, props[item], {
+        path: "/",
+        expires,
+      });
     });
+    console.log("done");
+    if (props.manager) navigate("/owner");
+    Open(false);
   };
+
   return (
     <LoginPopup>
       <Formik
@@ -28,13 +32,33 @@ function LoginModal({ Open }) {
         onSubmit={(values) => {
           onSubmit(values)
             .then((res) => {
-              const { id, type, user_name, accessToken } = res.data;
-              console.log(id);
-              updateCookie("id", id);
-              updateCookie("type", type);
-              updateCookie("user_name", user_name);
-              updateCookie("accessToken", accessToken);
-              Open(false);
+              const { id, type, role, token } = res.data;
+              const logedin = true;
+              let user =
+                type.toLowerCase() === "customer" &&
+                role.toLowerCase() === "user"
+                  ? true
+                  : false;
+
+              let serviceProvider =
+                type.toLowerCase() === "service_provider" ? true : false;
+
+              let manager =
+                type.toLowerCase() === "manager" &&
+                role.toLowerCase() === "super_admin"
+                  ? true
+                  : false;
+              console.log({});
+              updateCookie({
+                id,
+                type,
+                role,
+                token,
+                logedin,
+                user,
+                serviceProvider,
+                manager,
+              });
             })
             .catch((err) => {
               console.log(err.response);

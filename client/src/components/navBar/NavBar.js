@@ -4,26 +4,32 @@ import logo from "../../images/Logo.svg";
 import menu from "../../images/nav/hamberger.svg";
 import close from "../../images/nav/close.png";
 import { Link } from "react-router-dom";
-// import Dropdown from "../dropdown/DropDown";
 import Modal from "react-modal";
 import SignupModal from "../modals/SignupModal";
 import LoginModal from "../modals/LoginModal";
 import { useCookies } from "react-cookie";
-// import AuthContext from "../../context/AuthContext";
+import useAuth from "../../hooks/useAuth";
 
 function NavBar() {
   const [hidden, setHidden] = useState(true);
   const [width, setWidth] = useState(window.innerWidth);
   const [LoginPopup, setLoginPopup] = useState(false);
   const [SignupPopup, setSignupPopup] = useState(false);
-  // const { loginStatus } = useContext(AuthContext);
   const [cookie, setCookie, removeCookie] = useCookies();
+  const { logedin, user, serviceProvider, manager } = cookie;
+
+  console.log({ logedin, user, serviceProvider, manager });
 
   const deleteCookies = () => {
     removeCookie("id");
     removeCookie("user_name");
     removeCookie("type");
     removeCookie("accessToken");
+    removeCookie("role");
+    removeCookie("logedin");
+    removeCookie("user");
+    removeCookie("serviceProvider");
+    removeCookie("manager");
   };
 
   const toggle = () => {
@@ -56,7 +62,6 @@ function NavBar() {
               style={({ height: "3rem" }, { width: "10rem" })}
             />
           </Link>
-
           {width <= 560 &&
             (hidden ? (
               <HambergerMenu onClick={toggle} />
@@ -65,10 +70,12 @@ function NavBar() {
             ))}
           {(!hidden || width > 560) && (
             <NavItems>
-              <Link to="/contact" style={linkStyle}>
-                <NavItem>Contact Us</NavItem>
-              </Link>
-              {!cookie.id ? (
+              {(user === "true" || logedin === "false" || !logedin) && (
+                <Link to="/contact" style={linkStyle}>
+                  <NavItem>Contact Us</NavItem>
+                </Link>
+              )}
+              {(logedin === "false" || !logedin) && (
                 <>
                   <Link to="" style={linkStyle}>
                     <NavItem onClick={() => setLoginPopup(true)}>
@@ -81,16 +88,26 @@ function NavBar() {
                     </NavItem>
                   </Link>
                 </>
-              ) : (
+              )}
+              {user === "true" && (
+                <Link to="/viewBookings" style={linkStyle}>
+                  <NavItem>Booking Status</NavItem>
+                </Link>
+              )}
+              {manager === "true" && (
                 <>
-                  <Link to="/viewBookings" style={linkStyle}>
-                    <NavItem>Booking Status</NavItem>
+                  <Link to="/bookingManagement" style={linkStyle}>
+                    <NavItem>Booking Management</NavItem>
                   </Link>
-
-                  <Link to="" style={linkStyle}>
-                    <NavItem onClick={deleteCookies}>Logout</NavItem>
+                  <Link to="/userManagement" style={linkStyle}>
+                    <NavItem>User Management</NavItem>
                   </Link>
                 </>
+              )}
+              {logedin === "true" && (
+                <Link to="" style={linkStyle}>
+                  <NavItem onClick={deleteCookies}>Logout</NavItem>
+                </Link>
               )}
             </NavItems>
           )}

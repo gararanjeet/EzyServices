@@ -34,7 +34,7 @@ function UserManagement() {
 
     const fetchServices = async () => {
       const result = await axios
-        .get("/Admin/Services", [])
+        .get("/Service/list", [])
         .catch((err) => console.log(err));
       setServices(result.data);
     };
