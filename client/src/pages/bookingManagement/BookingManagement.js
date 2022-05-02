@@ -22,6 +22,7 @@ function BookingManagement() {
   const [detailsId, setDetailsId] = useState("");
   const [details, setDetails] = useState();
   const [assign, setAssignment] = useState(false);
+  const [refresh, setRefresh] = useState(0);
 
   const filter = () => {
     let info = data;
@@ -53,9 +54,8 @@ function BookingManagement() {
       await setData(formatedData);
     };
     fetchData();
-  }, []);
+  }, [refresh]);
 
-  console.log(data, filterData);
   return (
     <BookingManagementPage>
       <Container>
@@ -91,6 +91,7 @@ function BookingManagement() {
             setShowDetails={setShowDetails}
             setDetailsId={setDetailsId}
             setAssignment={setAssignment}
+            setRefresh={setRefresh}
           ></Table>
         </TableContainer>
         <Modal
@@ -105,6 +106,7 @@ function BookingManagement() {
             data={details}
             open={setShowDetails}
             assign={assign}
+            setRefresh={setRefresh}
           ></BookingDetails>
         </Modal>
       </Container>

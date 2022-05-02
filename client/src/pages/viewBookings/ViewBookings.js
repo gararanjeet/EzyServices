@@ -9,19 +9,15 @@ function ViewBookings() {
   const [showBookings, setShowBookings] = useState(false);
   return (
     <BookingDetailsPage>
-      {showBookings === false ? (
-        <Container>
-          <ContainerLeft>
-            <ServiceLogo style={logoStyle} logo={logo}></ServiceLogo>
-            <Link to="/allBookings">
-              <Button>All Bookings</Button>
-            </Link>
-          </ContainerLeft>
-          <CheckBookDetails></CheckBookDetails>
-        </Container>
-      ) : (
-        <container></container>
-      )}
+      <Container>
+        <ContainerLeft>
+          <ServiceLogo style={logoStyle} logo={logo}></ServiceLogo>
+          <Link to="/allBookings">
+            <Button>All Bookings</Button>
+          </Link>
+        </ContainerLeft>
+        <CheckBookDetails></CheckBookDetails>
+      </Container>
     </BookingDetailsPage>
   );
 }
@@ -58,7 +54,7 @@ const ContainerLeft = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  @media (max-width: 35rem) {
+  @media (maxwidth: 35rem) {
     margin-bottom: 3rem;
   }
 `;

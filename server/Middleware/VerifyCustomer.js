@@ -1,11 +1,11 @@
 const { verify } = require("jsonwebtoken");
 
 const verifyCustomer = (req, res, next) => {
-  const { accessToken } = req.body;
-  console.log("bad reqeust");
-  if (!accessToken) return res.status(400).send("AccessDenied");
+  let { token } = req.headers;
+  token = token.split(" ")[1];
+  if (!token) return res.status(400).send("AccessDenied");
   try {
-    const validToken = verify(accessToken, process.env.ACCESS_TOKEN_SCRET);
+    const validToken = verify(token, process.env.ACCESS_TOKEN_SCRET);
     if (validToken.type === "CUSTOMER" && validToken.role === "USER") {
       console.log(validToken);
       return next();

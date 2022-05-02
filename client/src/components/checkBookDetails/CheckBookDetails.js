@@ -1,6 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
-
+import axios from "../axios";
+import { useCookies } from "react-cookie";
+import Modal from "react-modal";
+import Notify from "../modals/Notify";
+import BookingDetails from "../modals/BookingDetails";
 const DetailsForm = styled.div`
   flex: 1;
   text-align: center;
@@ -14,13 +18,61 @@ const Heading = styled.h1`
 `;
 
 function CheckBookDetails() {
+  const [booking_uid, setBooking_uid] = useState();
+  const [cookie] = useCookies();
+  const { id, token } = cookie;
+  const [details, setDetails] = useState();
+  const [popup, setpopup] = useState(false);
+  const [notify, setNotify] = useState(false);
+  const HandleSubmit = (e) => {
+    e.preventDefault();
+    fetchDetails();
+  };
+
+  const fetchDetails = async () => {
+    const result = await axios
+      .get("/Booking/singleBookingDetails", {
+        headers: { token: `Barear ${token}` },
+        params: { booking_uid, id },
+      })
+      .catch((err) => {
+        alert("error occurecd");
+        console.log(err);
+      });
+    if (result.data.length === 0) setNotify(true);
+    if (result.data.length === 1) {
+      setDetails(result.data);
+      setpopup(true);
+    }
+  };
+
   return (
-    <Form>
-      <FormTitle>Booking Details</FormTitle>
-      <Lable>Enter Ezy Booking number</Lable>
-      <Input type="text" />
-      <Button>View Details</Button>
-    </Form>
+    <>
+      <Form>
+        <FormTitle>Booking Details</FormTitle>
+        <Lable>Enter Ezy Booking number</Lable>
+        <Input
+          type="text"
+          onChange={(e) => {
+            setBooking_uid(e.target.value);
+          }}
+        />
+        <Button onClick={(e) => HandleSubmit(e)}>View Details</Button>
+      </Form>
+      <Modal isOpen={notify} style={ModalStyle}>
+        <Notify
+          text={`No Booking with this boooking uid`}
+          type="failed"
+        ></Notify>
+      </Modal>
+      <Modal
+        isOpen={popup}
+        style={ModalStyle}
+        onRequestClose={() => setpopup(false)}
+      >
+        <BookingDetails data={details} open={setpopup}></BookingDetails>
+      </Modal>
+    </>
   );
 }
 
@@ -87,3 +139,25 @@ const Button = styled.button`
     color: #565656;
   }
 `;
+
+const ModalStyle = {
+  overlay: {
+    position: "fixed",
+    backgroundColor: "rgba(0, 0, 0, 0.75)",
+  },
+  content: {
+    textAlign: "center",
+    position: "absolute",
+    maxWidth: "500px",
+    height: "fit-content",
+    margin: "auto auto",
+    border: "1px solid #ccc",
+    background: "white",
+    overflow: "auto",
+    WebkitOverflowScrolling: "touch",
+    borderRadius: "2rem",
+    outline: "none",
+    padding: "20px",
+    transition: "1s easy",
+  },
+};

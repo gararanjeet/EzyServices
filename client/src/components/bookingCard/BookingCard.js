@@ -1,8 +1,12 @@
+import axios from "../axios";
 import React from "react";
 import styled from "styled-components";
+import { useCookies } from "react-cookie";
 
-function BookingCard({ info }) {
+function BookingCard({ info, refresh }) {
+  const [cookie] = useCookies();
   const {
+    booking_id,
     booking_uid,
     end,
     start,
@@ -11,15 +15,28 @@ function BookingCard({ info }) {
     service_date,
     sub_service,
     status,
+    assigned,
   } = info;
-  console.log(status);
+
+  const HandleSubmit = async () => {
+    try {
+      await axios.delete("/Booking/delete", {
+        headers: { token: `Barer ${cookie.token}` },
+        data: { booking_id, id: cookie.id },
+      });
+      refresh((count) => count + 1);
+    } catch {
+      console.log("err");
+    }
+    console.log("modified");
+  };
   return (
     <Item>
       <Card
         className={
-          status === "withdrawn"
+          status === "CANCELLED"
             ? "cancel"
-            : status === "completed"
+            : status === "COMPLETED"
             ? "success"
             : "pending"
         }
@@ -33,14 +50,16 @@ function BookingCard({ info }) {
           </span>
         </Slot>
         <Status>{status}</Status>
-
-        <Button
-          className={
-            (status === "completed" || status === "withdrawn") && "disabled"
-          }
-        >
-          Cancel
-        </Button>
+        {["PENDING", "AWAITING", "ACCEPTED", "REJECTED"].includes(status) && (
+          <Button
+            className={
+              (status === "completed" || status === "withdrawn") && "disabled"
+            }
+            onClick={(e) => HandleSubmit(e)}
+          >
+            Cancel
+          </Button>
+        )}
       </Card>
     </Item>
   );
@@ -55,10 +74,10 @@ const Card = styled.div`
   padding: 1.5rem;
   margin: 1rem;
   text-align: center;
-  height: fit-content;
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: space-around;
   &.cancel {
     background-color: #ffc6c6;
     box-shadow: 0 0 1rem #ffc6c6;
@@ -79,7 +98,7 @@ const Card = styled.div`
 const Title = styled.h2`
   text-transform: capitalize;
   margin-bottom: 0.5rem;
-  font-size: 1.5rem;
+  font-size: 1.3rem;
 `;
 
 const Subtitle = styled.h3`

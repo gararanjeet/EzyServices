@@ -1,10 +1,10 @@
 const { db } = require("../../db");
 
-const assign = (req, res) => {
+const serviceProvider_assign = (req, res) => {
   const { booking_id, serviceProvider_id } = req.body;
   db.query(
-    "UPDATE `booking` SET `status` = ? WHERE `id`=?",
-    ["AWAITING", booking_id],
+    "UPDATE `booking` SET `status` = ?, `assigned_to` = ? WHERE `id`=?",
+    ["AWAITING", serviceProvider_id, booking_id],
     (err, result) => {
       if (err) return res.status(500).send(err);
       db.query(
@@ -27,4 +27,4 @@ const assign = (req, res) => {
   );
 };
 
-module.exports = { assign };
+module.exports = { serviceProvider_assign };

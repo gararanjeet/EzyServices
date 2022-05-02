@@ -1,4 +1,5 @@
 const express = require("express");
+const { verifyCustomer } = require("../Middleware/VerifyCustomer");
 
 const {
   booking_vehicleWaterService_create,
@@ -7,6 +8,12 @@ const {
 const { bookings_list_user } = require("../Controlers/Bookings/list_user");
 
 const { bookings_list } = require("../Controlers/Bookings/list");
+
+const { booking_delete } = require("../Controlers/Bookings/delete_booking");
+
+const {
+  booking_details,
+} = require("../Controlers/Bookings/sinigle_booking_details");
 
 const Bookings = express.Router();
 
@@ -17,6 +24,10 @@ Bookings.post(
   booking_vehicleWaterService_create
 );
 
-Bookings.get("/list_user", bookings_list_user);
+Bookings.delete("/delete", booking_delete);
+
+Bookings.get("/list_user", verifyCustomer, bookings_list_user);
+
+Bookings.get("/singleBookingDetails", verifyCustomer, booking_details);
 
 module.exports = { Bookings };

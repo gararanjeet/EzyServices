@@ -8,7 +8,9 @@ import Modal from "react-modal";
 import SignupModal from "../modals/SignupModal";
 import LoginModal from "../modals/LoginModal";
 import { useCookies } from "react-cookie";
-import useAuth from "../../hooks/useAuth";
+import userLogo from "../../images/OwnerHome/user.svg";
+
+Modal.setAppElement("#portal");
 
 function NavBar() {
   const [hidden, setHidden] = useState(true);
@@ -70,9 +72,40 @@ function NavBar() {
             ))}
           {(!hidden || width > 560) && (
             <NavItems>
+              {user === "true" && (
+                <Link to="/" style={linkStyle}>
+                  <NavItem>Home</NavItem>
+                </Link>
+              )}
+
               {(user === "true" || logedin === "false" || !logedin) && (
                 <Link to="/contact" style={linkStyle}>
                   <NavItem>Contact Us</NavItem>
+                </Link>
+              )}
+              {user === "true" && (
+                <Link to="/viewBookings" style={linkStyle}>
+                  <NavItem>Booking Status</NavItem>
+                </Link>
+              )}
+              {manager === "true" && (
+                <>
+                  <Link to="/bookingManagement" style={linkStyle}>
+                    {/* <NavIcon src={userLogo} alt="logo" /> */}
+                    <NavItem>
+                      <p>Booking</p> Management
+                    </NavItem>
+                  </Link>
+                  <Link to="/userManagement" style={linkStyle}>
+                    <NavItem>
+                      <p>User</p> Management
+                    </NavItem>
+                  </Link>
+                </>
+              )}
+              {logedin === "true" && (
+                <Link to="" style={linkStyle}>
+                  <NavItem onClick={deleteCookies}>Logout</NavItem>
                 </Link>
               )}
               {(logedin === "false" || !logedin) && (
@@ -88,26 +121,6 @@ function NavBar() {
                     </NavItem>
                   </Link>
                 </>
-              )}
-              {user === "true" && (
-                <Link to="/viewBookings" style={linkStyle}>
-                  <NavItem>Booking Status</NavItem>
-                </Link>
-              )}
-              {manager === "true" && (
-                <>
-                  <Link to="/bookingManagement" style={linkStyle}>
-                    <NavItem>Booking Management</NavItem>
-                  </Link>
-                  <Link to="/userManagement" style={linkStyle}>
-                    <NavItem>User Management</NavItem>
-                  </Link>
-                </>
-              )}
-              {logedin === "true" && (
-                <Link to="" style={linkStyle}>
-                  <NavItem onClick={deleteCookies}>Logout</NavItem>
-                </Link>
               )}
             </NavItems>
           )}
@@ -188,7 +201,7 @@ const NavItems = styled.div`
 `;
 
 const NavItem = styled.div`
-  text-align: center;
+  text-align: left;
   font-size: 1.3rem;
   padding: 0.4em;
   color: white;
@@ -204,6 +217,10 @@ const NavItem = styled.div`
     z-index: 999;
     margin: auto 0;
   }
+`;
+
+const NavIcon = styled.img`
+  height: 2.5rem;
 `;
 
 const ModalStyle = {
@@ -234,6 +251,9 @@ const linkStyle = {
   height: "fit-content",
   width: "fit-content",
   marginRight: "0.5em",
+  display: "flex",
+  alignItems: "center",
+  // background: "#d5d421",
   ":hover": {
     color: "#565656",
   },

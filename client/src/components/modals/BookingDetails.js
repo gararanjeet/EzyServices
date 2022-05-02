@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import axios from "../axios";
 
-function BookingDetails({ data, open, assign }) {
+function BookingDetails({ data, open, assign, setRefresh }) {
   const [serviceProviders, setServiceProviders] = useState([]);
   const [serviceProvider, setServiceProvider] = useState([]);
   const [phone, setPhone] = useState("");
@@ -39,7 +39,7 @@ function BookingDetails({ data, open, assign }) {
         .catch((err) => {
           alert("error occured");
         });
-      window.location.reload();
+      setRefresh((count) => count + 1);
       open(false);
     }
   };
@@ -49,6 +49,7 @@ function BookingDetails({ data, open, assign }) {
   }, [assign]);
 
   data = data[0];
+  console.log(data);
   return (
     <Container>
       <Title>{assign ? "Job Card" : "Booking Details"}</Title>
@@ -88,6 +89,12 @@ function BookingDetails({ data, open, assign }) {
         <Key>Service :</Key>
         <Value>{data.service}</Value>
       </Row>
+      {!assign && (
+        <Row>
+          <Key>Assigned to :</Key>
+          <Value>{data.assigned_name}</Value>
+        </Row>
+      )}
       {assign && (
         <>
           <Row>

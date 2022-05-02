@@ -1,10 +1,10 @@
 const { db } = require("../../db");
 //bookings_list_user
 const bookings_list_user = (req, res) => {
-  const { user_id } = req.body;
+  const { id } = req.query;
   db.query(
-    "SELECT booking_uid, name as service, sub_service, service_date, start, end, price, status FROM (SELECT booking_uid,service_date, sub_service_id, status, start, end, name  FROM ( SELECT booking_uid,service_date,b.service_id, sub_service_id, status, start, end FROM `booking` as b INNER JOIN `slot` as s on s.id = b.slot_id WHERE ? ) as result INNER JOIN service on result.service_id = service.id) AS result INNER JOIN sub_service ON result.sub_service_id = sub_service.id",
-    [user_id],
+    "SELECT b.id as booking_id, b.booking_uid, b.service_date, slot.start, slot.end, s.name as 'service', sub.sub_service, sub.price, a.user_name as 'assigned', b.status FROM booking as b LEFT JOIN slot on slot.id = b.slot_id LEFT JOIN service as s on s.id = b.service_id LEFT JOIN sub_service sub on sub.id = b.sub_service_id LEFT JOIN account as a on a.id = b.assigned_to  WHERE b.account_id = ?",
+    [id],
     (err, result) => {
       if (err) return res.status(500).send(err);
       if (result.length == 0)

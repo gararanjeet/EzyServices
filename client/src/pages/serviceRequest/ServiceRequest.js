@@ -1,11 +1,36 @@
-import React from "react";
+import axios from "../../components/axios";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import { useCookies } from "react-cookie";
+import ServiceProviderCard from "../../components/serviceproviderCard/ServiceProviderCard";
 
 function ServiceRequest() {
+  const [cookies] = useCookies();
+  const [data, setData] = useState([]);
+
+  const HandleClick = (data) => {
+    console.log(data);
+  };
+  const fetchData = async () => {
+    const { id, token } = cookies;
+    const result = await axios.get("/ServiceProvider/orders", {
+      headers: { token: `Barers ${token}` },
+      params: { id },
+    });
+    setData(result.data);
+  };
+  useEffect(() => fetchData(), []);
+  console.log(data);
   return (
     <ServiceProvider>
       <Container>
-          
+        {data.map((order) => (
+          <ServiceProviderCard
+            key={order.id}
+            data={order}
+            HandleClick={HandleClick}
+          ></ServiceProviderCard>
+        ))}
       </Container>
     </ServiceProvider>
   );
@@ -25,6 +50,7 @@ const ServiceProvider = styled.div`
     rgba(189, 244, 255, 1) 85%,
     rgba(169, 241, 255, 1) 100%
   );
+  overflow: scroll;
 `;
 
 const Container = styled.div`
@@ -33,10 +59,14 @@ const Container = styled.div`
     width: 90%;
     max-width: 1400px;
     margin-top: 9rem;
+    align-items: center;
+    flex-direction: column;
   }
   height: fit-content;
   width: 90%;
   margin: auto auto;
-  margin-top: 3rem;
-  border: 1px solid black;
+  margin: 3rem auto;
+  padding-bottom: 5rem;
+
+  /* border: 1px solid black; */
 `;

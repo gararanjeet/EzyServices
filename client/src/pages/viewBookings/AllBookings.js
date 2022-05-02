@@ -2,25 +2,40 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import BookingCard from "../../components/bookingCard/BookingCard";
 import axios from "../../components/axios";
+import { useCookies } from "react-cookie";
 
 function AllBookings() {
   const [data, setData] = useState([]);
+  const [cookie] = useCookies();
+  const [refresh, setRefresh] = useState(0);
+
+  const fetchBookings = async () => {
+    const { token } = cookie;
+    const { id } = cookie;
+    const bookings = await axios
+      .get("/Booking/list_user", {
+        headers: { token: `Bearer ${token}` },
+        params: { id },
+      })
+      .catch((err) => console.log(err));
+    setData(bookings.data);
+    console.log(bookings.data);
+  };
   useEffect(() => {
-    console.log("called");
-    const fetchBookings = async () => {
-      const bookings = await axios
-        .get("/Booking/list_user")
-        .catch((err) => console.log(err));
-      setData(bookings.data);
-    };
     fetchBookings();
-  }, []);
+    console.log("changed");
+  }, [refresh]);
 
   return (
     <AllBooking>
+      <Title>All your Bookings</Title>
       <Container>
         {data.map((bookings) => (
-          <BookingCard info={bookings} key={bookings.booking_uid}></BookingCard>
+          <BookingCard
+            info={bookings}
+            key={bookings.booking_uid}
+            refresh={setRefresh}
+          ></BookingCard>
         ))}
       </Container>
     </AllBooking>
@@ -30,8 +45,6 @@ function AllBookings() {
 const AllBooking = styled.div`
   height: calc(100% - 5.3rem);
   background: rgb(255, 255, 255);
-  display: flex;
-  justify-content: center;
   background: linear-gradient(
     0deg,
     rgba(255, 255, 255, 1) 0%,
@@ -41,8 +54,24 @@ const AllBooking = styled.div`
   );
 `;
 
+const Title = styled.h1`
+  padding-top: 2rem;
+  text-align: center;
+  font-size: 3rem;
+  color: #565656;
+  text-transform: capitalize;
+`;
+
 const Container = styled.div`
-  @media (min-width: 35rem) {
+  width: 90%;
+  margin: auto auto;
+  margin-top: 3rem;
+  width: min(90%, 1400px);
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+
+  /* @media (min-width: 35rem) {
     height: fit-content;
     width: 90%;
     margin: auto auto;
@@ -69,7 +98,7 @@ const Container = styled.div`
   @media only screen and (min-width: 1300px) {
     grid-template-columns: repeat(4, 1fr);
     gap: 10px;
-  }
+  } */
 `;
 
 export default AllBookings;

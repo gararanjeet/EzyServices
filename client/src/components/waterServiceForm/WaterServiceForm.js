@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import styled from "styled-components";
-import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import axios from "../axios";
 import { useCookies } from "react-cookie";
 import Notify from "../modals/Notify";
-import { ref } from "yup";
+import Modal from "react-modal";
 
 const formatDate = (date) => {
   date = date.toISOString().replace(/T.*/, "").split("-").reverse().join("-");
@@ -14,6 +13,8 @@ const formatDate = (date) => {
   date = date.join("-");
   return date;
 };
+
+Modal.setAppElement("#portal");
 
 function WaterServiceForm() {
   var minDate = new Date();
@@ -56,7 +57,7 @@ function WaterServiceForm() {
     const getSlots = (date) => {
       if (date === "" || !date) return;
       // date = date.toString();
-      console.log(date);
+      console.log(date, "in front");
       axios.post("/FreeSlot/waterServicing", { date: date }).then((res) => {
         console.log(res.data);
         setOptions(res.data);
@@ -180,12 +181,28 @@ function WaterServiceForm() {
         </Lable>
         <Button>Book Now</Button>
       </Form>
-      {submitted === true && (
+      {/* <Modal
+        isOpen={SignupPopup}
+        style={ModalStyle}
+        onRequestClose={() => setSignupPopup(false)}
+      >
+        <SignupModal Open={setSignupPopup} />
+      </Modal> */}
+      <Modal isOpen={submitted === true} style={ModalStyle}>
         <Notify
           text={`Booking Success full     Your Booking id : ${bookingId}`}
           type="success"
         ></Notify>
-      )}
+      </Modal>
+      <Modal isOpen={submitted === false} style={ModalStyle}>
+        <Notify text={`Booking failed Try again later`} type="failed"></Notify>
+      </Modal>
+      {/* {submitted === true && (
+        <Notify
+          text={`Booking Success full     Your Booking id : ${bookingId}`}
+          type="success"
+        ></Notify>
+      )} */}
       {submitted === false && (
         <Notify text={`Booking failed Try again later`} type="failed"></Notify>
       )}
@@ -283,3 +300,25 @@ const Button = styled.button`
     color: #565656;
   }
 `;
+
+const ModalStyle = {
+  overlay: {
+    position: "fixed",
+    backgroundColor: "rgba(0, 0, 0, 0.75)",
+  },
+  content: {
+    textAlign: "center",
+    position: "absolute",
+    maxWidth: "500px",
+    height: "fit-content",
+    margin: "auto auto",
+    border: "1px solid #ccc",
+    background: "white",
+    overflow: "auto",
+    WebkitOverflowScrolling: "touch",
+    borderRadius: "2rem",
+    outline: "none",
+    padding: "20px",
+    transition: "1s easy",
+  },
+};
