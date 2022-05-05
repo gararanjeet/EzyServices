@@ -16,21 +16,21 @@ const booking_vehicleWaterService_create = async (req, res) => {
   const service_id = 1;
 
   db.query("SELECT * FROM account WHERE ID = ?", [user_id], (err, result) => {
-    if (err) return resp.status(500).send(err);
+    if (err) return res.status(500).send(err);
     if (result.length !== 1) return resp.status(400).send("user Doesnt Exist");
 
     db.query(
-      "SELECT id FROM sub_service WHERE sub_service = ?",
+      "SELECT id FROM sub_service WHERE name = ?",
       [vehicle],
       (err, result) => {
-        if (err) return resp.status(500).send(err);
+        if (err) return res.status(500).send(err);
         const sub_service_id = result[0].id;
 
         db.query(
           "SELECT id FROM slot WHERE start = ?",
           [slot],
           (err, result) => {
-            if (err) return resp.status(500).send(err);
+            if (err) return res.status(500).send(err);
             const slot_id = result[0].id;
             const status = "pending";
             const booking_uid = getId();
@@ -50,7 +50,7 @@ const booking_vehicleWaterService_create = async (req, res) => {
                 status,
               ],
               (err, result) => {
-                if (err) return resp.status(500).send(err);
+                if (err) return res.status(500).send(err);
                 db.query(
                   "SELECT id FROM `booking` WHERE `booking_uid` = ?",
                   [booking_uid],

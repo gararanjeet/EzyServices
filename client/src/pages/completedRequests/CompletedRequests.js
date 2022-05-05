@@ -3,42 +3,48 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useCookies } from "react-cookie";
 import ServiceProviderCard from "../../components/serviceproviderCard/ServiceProviderCard";
+import empty from "../../images/empty.svg"
 
-function ServiceRequest() {
+function CompletedRequests() {
   const [cookies] = useCookies();
   const [data, setData] = useState([]);
+  const { id, token } = cookies;
 
-  const HandleClick = (data) => {
-    console.log(data);
-  };
   const fetchData = async () => {
-    const { id, token } = cookies;
-    const result = await axios.get("/ServiceProvider/orders", {
+    const result = await axios.get("/ServiceProvider/completed", {
       headers: { token: `Barers ${token}` },
       params: { id },
     });
     setData(result.data);
   };
+
   useEffect(() => fetchData(), []);
-  console.log(data);
   return (
-    <ServiceProvider>
+    <Completed>
       <Container>
-        {data.map((order) => (
-          <ServiceProviderCard
-            key={order.id}
-            data={order}
-            HandleClick={HandleClick}
-          ></ServiceProviderCard>
-        ))}
+        <Title>Completed</Title>
+        {data.length > 0 ? (
+          data.map((order) => (
+            <ServiceProviderCard
+              key={order.id}
+              data={order}
+            ></ServiceProviderCard>
+          ))
+        ) : (
+          <img src={empty} alt="empty" />
+        )}
       </Container>
-    </ServiceProvider>
+    </Completed>
   );
 }
 
-export default ServiceRequest;
+export default CompletedRequests;
 
-const ServiceProvider = styled.div`
+//
+
+// export default AcceptedRequests;
+
+const Completed = styled.div`
   height: calc(100% - 5.3rem);
   background: rgb(255, 255, 255);
   display: flex;
@@ -58,15 +64,23 @@ const Container = styled.div`
     display: flex;
     width: 90%;
     max-width: 1400px;
-    margin-top: 9rem;
+    margin-top: 3rem;
     align-items: center;
     flex-direction: column;
   }
   height: fit-content;
   width: 90%;
   margin: auto auto;
-  margin: 3rem auto;
+  margin: 1rem auto;
   padding-bottom: 5rem;
 
   /* border: 1px solid black; */
+`;
+
+const Title = styled.h1`
+  margin-bottom: 3rem;
+  text-align: center;
+  font-size: 3rem;
+  font-weight: 800;
+  color: #565656;
 `;

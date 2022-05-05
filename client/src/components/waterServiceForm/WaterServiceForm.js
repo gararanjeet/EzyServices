@@ -6,6 +6,7 @@ import axios from "../axios";
 import { useCookies } from "react-cookie";
 import Notify from "../modals/Notify";
 import Modal from "react-modal";
+import displayRazorpay from "../payment/payment";
 
 const formatDate = (date) => {
   date = date.toISOString().replace(/T.*/, "").split("-").reverse().join("-");
@@ -28,36 +29,43 @@ function WaterServiceForm() {
 
   const { register, handleSubmit, formState } = useForm();
   const { errors } = formState;
-  const [showModal, setShowModal] = useState(false);
+  const [showModel, setShowModel] = useState(false);
   const [options, setOptions] = useState([]);
   const [date, setDate] = useState();
   const [cookie, setCookie, removeCookie] = useCookies();
   const [submitted, setsubmitted] = useState();
+  const [success, setSuccess] = useState();
+  const [failed, setFailed] = useState();
   const [bookingId, setBookingId] = useState();
+  const [amount, setAmount] = useState();
+  const [orderUrl, setOrderUrl] = useState("");
 
   const submit = (data) => {
-    console.log(data);
     data.user_id = cookie.id;
     axios
       .post("/Booking/vehicleWaterService_create", data)
       .then((res) => {
-        console.log(res);
-        setsubmitted(true);
+        setSuccess(true);
         setBookingId(res.data.booking_id);
-        setTimeout(() => setsubmitted(undefined), 3000);
       })
       .catch((err) => {
+        setBookingId("");
         console.log(err);
-        setBookingId(false);
-        setTimeout(() => setsubmitted(undefined), 3000);
       });
+  };
+
+  const fetchPrice = async (model) => {
+    if (model === "") setAmount();
+    else {
+      const result = await axios.get(`/Price/waterServicing/${model}`);
+      setAmount(result.data.price);
+      setOrderUrl(`/Payment/waterServicing/${model}`);
+    }
   };
 
   useEffect(() => {
     const getSlots = (date) => {
       if (date === "" || !date) return;
-      // date = date.toString();
-      console.log(date, "in front");
       axios.post("/FreeSlot/waterServicing", { date: date }).then((res) => {
         console.log(res.data);
         setOptions(res.data);
@@ -68,7 +76,11 @@ function WaterServiceForm() {
 
   return (
     <>
-      <Form onSubmit={handleSubmit(submit)}>
+      <Form
+        onSubmit={handleSubmit((data) =>
+          displayRazorpay(data, submit, orderUrl)
+        )}
+      >
         <FormTitle>Booking Form</FormTitle>
         <Small>{errors.name?.message}</Small>
         <Lable>
@@ -125,16 +137,18 @@ function WaterServiceForm() {
             {...register("vehicle", {
               required: "Required !!!",
               onChange: (e) => {
-                if (e.target.value === "car") setShowModal(true);
-                else setShowModal(false);
+                if (e.target.value === "car") setShowModel(true);
+                else setShowModel(false);
+                fetchPrice(e.target.value);
               },
             })}
           >
+            <option value="">Select</option>
             <option value="bike">Bike</option>
             <option value="car">Car</option>
           </Select>
         </Lable>
-        {showModal && (
+        {showModel && (
           <Lable>
             Modal{" "}
             <Select {...register("modal", { required: "Required !!!" })}>
@@ -179,30 +193,31 @@ function WaterServiceForm() {
             {...register("address", { required: "Address is required !!!" })}
           />
         </Lable>
+        {amount && (
+          <Lable>
+            Amount
+            <Input value={amount} readOnly />
+          </Lable>
+        )}
         <Button>Book Now</Button>
       </Form>
-      {/* <Modal
-        isOpen={SignupPopup}
+      <Modal
+        isOpen={success}
         style={ModalStyle}
-        onRequestClose={() => setSignupPopup(false)}
+        onRequestClose={() => setSuccess(false)}
       >
-        <SignupModal Open={setSignupPopup} />
-      </Modal> */}
-      <Modal isOpen={submitted === true} style={ModalStyle}>
         <Notify
           text={`Booking Success full     Your Booking id : ${bookingId}`}
           type="success"
         ></Notify>
       </Modal>
-      <Modal isOpen={submitted === false} style={ModalStyle}>
+      <Modal
+        isOpen={failed}
+        style={ModalStyle}
+        onRequestClose={() => setFailed(false)}
+      >
         <Notify text={`Booking failed Try again later`} type="failed"></Notify>
       </Modal>
-      {/* {submitted === true && (
-        <Notify
-          text={`Booking Success full     Your Booking id : ${bookingId}`}
-          type="success"
-        ></Notify>
-      )} */}
       {submitted === false && (
         <Notify text={`Booking failed Try again later`} type="failed"></Notify>
       )}

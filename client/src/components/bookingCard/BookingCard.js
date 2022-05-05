@@ -43,6 +43,7 @@ function BookingCard({ info, refresh }) {
       >
         <Title>{service}</Title>
         <Subtitle>{sub_service}</Subtitle>
+        <Bookinguid>{booking_uid}</Bookinguid>
         <Slot>
           <span>{service_date.slice(0, 10)}</span>
           <span>
@@ -99,6 +100,11 @@ const Title = styled.h2`
   text-transform: capitalize;
   margin-bottom: 0.5rem;
   font-size: 1.3rem;
+`;
+
+const Bookinguid = styled.h3`
+  font-size: 1.2rem;
+  font-weight: bold;
 `;
 
 const Subtitle = styled.h3`

@@ -7,6 +7,9 @@ const { Bookings } = require("./Routes/bookings.js");
 const { ServiceProvider } = require("./Routes/serviceProvider.js");
 const { FreeSlots } = require("./Routes/freeSlots.js");
 const { Services } = require("./Routes/services.js");
+const { Price } = require("./Routes/price.js");
+const { Payment } = require("./Routes/payments.js");
+
 
 require("dotenv").config();
 const app = express();
@@ -24,6 +27,10 @@ app.use("/ServiceProvider", ServiceProvider);
 app.use("/FreeSlot", FreeSlots);
 
 app.use("/Service", Services);
+
+app.use("/Price", Price);
+
+app.use("/Payment", Payment);
 
 
 app.listen(8000, () => {

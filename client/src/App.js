@@ -10,33 +10,30 @@ import OwnerHome from "./pages/ownerHome/OwnerHome";
 import UserManagement from "./pages/userManagement/UserManagement";
 import BookingManagement from "./pages/bookingManagement/BookingManagement";
 import Contact from "./pages/contact/Contact";
-import {
-  PartialUserAuth,
-  RequireAuth,
-  UserAuth,
-} from "./components/requireAuth/RequireAuth";
-import { ManagerAuth } from "./components/requireAuth/RequireAuth";
-import ServiceRequest from "./pages/serviceRequest/ServiceRequest";
+import { RequireAuth, HomeAuth } from "./components/requireAuth/RequireAuth";
+import AcceptedRequests from "./pages/acceptedRequests/AcceptedRequests";
+import PendingRequests from "./pages/pendingRequests/PendingRequests";
+import CompletedRequests from "./pages/completedRequests/CompletedRequests";
 
 function App() {
   return (
     <Router>
       <NavBar></NavBar>
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/waterservices" element={<Services />} />
         <Route path="/contact" element={<Contact />} />
-
-        {/* for test  */}
-        <Route path="/serviceRequests" element={<ServiceRequest />} />
-
+        {/* <Route element={<HomeAuth />}> */}
+        <Route path="/" element={<Home />} />
+        {/* </Route> */}
         <Route element={<RequireAuth allowed={"user"} />}>
+          <Route path="/waterservices" element={<Services />} />
           <Route path="/viewbookings" element={<ViewBookings />} />
           <Route path="/allbookings" element={<AllBookings />}></Route>
         </Route>
-        {/* <Route element={<RequireAuth allowed={"serviceProvider"} />}>
-          <Route path="/serviceRequests" />
-        </Route> */}
+        <Route element={<RequireAuth allowed={"serviceProvider"} />}>
+          <Route path="/acceptedRequests" element={<AcceptedRequests />} />
+          <Route path="/pendingRequests" element={<PendingRequests />} />
+          <Route path="/completedRequests" element={<CompletedRequests />} />
+        </Route>
         <Route element={<RequireAuth allowed={"manager"} />}>
           <Route path="/owner" element={<OwnerHome />} />
           <Route path="/userManagement" element={<UserManagement />} />

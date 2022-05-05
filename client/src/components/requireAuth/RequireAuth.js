@@ -14,44 +14,16 @@ export function RequireAuth({ allowed }) {
   );
 }
 
-export function UserAuth() {
-  const { auth } = useAuth();
+export function HomeAuth() {
+  const [cookie] = useCookies();
+  const { manager, serviceProvider } = cookie;
   const location = useLocation();
-  return auth.user ? (
-    <Outlet />
-  ) : (
-    <Navigate to={"/"} state={{ from: location }} replace />
-  );
-}
-
-export function ManagerAuth() {
-  const { auth } = useAuth();
-  console.log(auth);
-  const location = useLocation();
-  console.log(location);
-  return auth.manager ? (
-    <Outlet />
-  ) : (
+  console.log("homeauth", location);
+  return manager ? (
     <Navigate to={"/owner"} state={{ from: location }} replace />
-  );
-}
-
-export function ServiceProviderAuth() {
-  const { auth } = useAuth();
-  const location = useLocation();
-  return auth.serviceProvider ? (
-    <Outlet />
+  ) : serviceProvider ? (
+    <Navigate to={"/acceptedRequests"} state={{ from: location }} replace />
   ) : (
-    <Navigate to={"/"} state={{ from: location }} replace />
-  );
-}
-
-export function PartialUserAuth() {
-  const { auth } = useAuth();
-  const location = useLocation();
-  return auth.user || auth.logedin === false ? (
     <Outlet />
-  ) : (
-    <Navigate to={"/owner"} state={{ from: location }} replace />
   );
 }

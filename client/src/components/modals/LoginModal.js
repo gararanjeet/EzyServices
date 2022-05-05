@@ -6,7 +6,6 @@ import { Form, Formik, ErrorMessage, Field } from "formik";
 import { initialValues, onSubmit, validationSchema } from "./loginValidatoin";
 import { useNavigate, Navigate, useHistory } from "react-router-dom";
 
-
 function LoginModal({ Open }) {
   const navigate = useNavigate();
   // const history = useHistory();
@@ -21,8 +20,8 @@ function LoginModal({ Open }) {
         expires,
       });
     });
-    console.log("done");
     if (props.manager) navigate("/owner");
+    if (props.serviceProvider) navigate("/acceptedRequests");
     Open(false);
   };
 

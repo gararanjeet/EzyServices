@@ -19,6 +19,7 @@ function NavBar() {
   const [SignupPopup, setSignupPopup] = useState(false);
   const [cookie, setCookie, removeCookie] = useCookies();
   const { logedin, user, serviceProvider, manager } = cookie;
+  // const [homePath, setHomePath] = useState("/");
 
   console.log({ logedin, user, serviceProvider, manager });
 
@@ -56,7 +57,15 @@ function NavBar() {
     <>
       <Nav>
         <NavContent>
-          <Link to="/">
+          <Link
+            to={
+              serviceProvider === "true"
+                ? "/acceptedrequests"
+                : manager === "true"
+                ? "/owner"
+                : "/"
+            }
+          >
             {" "}
             <img
               src={logo}
@@ -87,6 +96,19 @@ function NavBar() {
                 <Link to="/viewBookings" style={linkStyle}>
                   <NavItem>Booking Status</NavItem>
                 </Link>
+              )}
+              {serviceProvider === "true" && (
+                <>
+                  <Link to="/acceptedRequests" style={linkStyle}>
+                    <NavItem>Accepted</NavItem>
+                  </Link>
+                  <Link to="/pendingRequests" style={linkStyle}>
+                    <NavItem>Pending</NavItem>
+                  </Link>
+                  <Link to="/completedRequests" style={linkStyle}>
+                    <NavItem>Completed</NavItem>
+                  </Link>
+                </>
               )}
               {manager === "true" && (
                 <>
