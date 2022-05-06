@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import axios from "../axios";
+import { useCookies } from "react-cookie";
 
 function BookingDetails({ data, open, assign, setRefresh }) {
   const [serviceProviders, setServiceProviders] = useState([]);
   const [serviceProvider, setServiceProvider] = useState([]);
   const [phone, setPhone] = useState("");
+  const [cookie] = useCookies();
 
   const SelectProvider = (id) => {
     try {
@@ -21,6 +23,7 @@ function BookingDetails({ data, open, assign, setRefresh }) {
   // const name = data.service;
   const fetchData = async ({ setServiceProviders }) => {
     const result = await axios.get("/ServiceProvider/list", {
+      headers: { token: `Barear ${cookie.token}` },
       params: { service: data.service },
     });
     setServiceProviders(result.data);
@@ -32,10 +35,18 @@ function BookingDetails({ data, open, assign, setRefresh }) {
     if (!serviceProvider_id) alert("Please select service Provider");
     else {
       await axios
-        .post("ServiceProvider/assign", {
-          booking_id,
-          serviceProvider_id,
-        })
+        .post(
+          "ServiceProvider/assign",
+          {
+            booking_id,
+            serviceProvider_id,
+          },
+          {
+            headers: {
+              token: `Barear ${cookie.token}`,
+            },
+          }
+        )
         .catch((err) => {
           alert("error occured");
         });
@@ -88,6 +99,10 @@ function BookingDetails({ data, open, assign, setRefresh }) {
       <Row>
         <Key>Service :</Key>
         <Value>{data.service}</Value>
+      </Row>
+      <Row>
+        <Key>Sub service :</Key>
+        <Value>{data.sub_service}</Value>
       </Row>
       {!assign && (
         <Row>

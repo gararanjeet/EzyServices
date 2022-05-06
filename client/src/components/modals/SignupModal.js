@@ -6,16 +6,19 @@ import { initialValues, onSubmit, validationSchema } from "./signupValidation";
 
 function SignupModal({ Open, registerServiceProvider }) {
   const [submitError, setSubmitError] = useState("");
+
   //Changing the initial values for service provider registration
   if (registerServiceProvider) {
     initialValues.type = "";
     initialValues.role = "";
   }
+  console.log(initialValues);
   return (
     <LoginPopup>
       <Formik
         initialValues={initialValues}
-        onSubmit={(values, { resetForm }) => {
+        onSubmit={(values) => {
+          console.log(values, "in formik");
           onSubmit(values)
             .then(() => {
               console.log("came into success");
@@ -66,8 +69,6 @@ function SignupModal({ Open, registerServiceProvider }) {
               <Field component="select" name="role" style={styleInput}>
                 <option>select</option>
                 <option value="VEHICLE_WATER_SERVICING">Vehicle_Water</option>
-                {/* <option value="Doctor">Doctor</option>
-                <option value="House Keeping">Keeping</option> */}
               </Field>
             </>
           ) : null}

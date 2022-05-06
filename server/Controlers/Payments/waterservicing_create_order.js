@@ -1,7 +1,8 @@
 const { db } = require("../../db");
-const {razorpay} = require("../../razorpay") //razorpay instance 
+const { razorpay } = require("../../razorpay"); //razorpay instance
 
 const waterServicing_order_create = (req, res) => {
+  console.log(req.body, req.headers);
   const { subservice } = req.params;
   const payment_capture = 1;
   const currency = "INR";

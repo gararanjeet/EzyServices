@@ -5,6 +5,7 @@ import { COLUMNS } from "./coloumn";
 import Modal from "react-modal";
 import axios from "../../components/axios";
 import SignupModal from "../../components/modals/SignupModal";
+import { useCookies } from "react-cookie";
 
 function UserManagement() {
   const [data, setData] = useState([]);
@@ -12,6 +13,7 @@ function UserManagement() {
   const [registerPopup, setRegisterpopup] = useState(false);
   const [filterBy, setFilterBy] = useState("");
   const [filteredData, setFilteredData] = useState([]);
+  const [cookie] = useCookies();
 
   const funct = () => {
     console.log("hello");
@@ -26,7 +28,9 @@ function UserManagement() {
   useEffect(() => {
     const fetchData = async () => {
       const result = await axios
-        .get("/ServiceProvider/list", [])
+        .get("/ServiceProvider/list", {
+          headers: { token: `Barear ${cookie.token}` },
+        })
         .catch((err) => console.log(err));
       setData(result.data);
       setFilteredData(result.data);

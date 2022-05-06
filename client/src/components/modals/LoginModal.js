@@ -3,12 +3,16 @@ import { useCookies } from "react-cookie";
 import styled from "styled-components";
 import GoogleAuth from "../googleAuth/GoogleAuth";
 import { Form, Formik, ErrorMessage, Field } from "formik";
-import { initialValues, onSubmit, validationSchema } from "./loginValidatoin";
+import {
+  initialValues,
+  onSubmit,
+  onSuccess,
+  validationSchema,
+} from "./loginValidatoin";
 import { useNavigate, Navigate, useHistory } from "react-router-dom";
 
 function LoginModal({ Open }) {
   const navigate = useNavigate();
-  // const history = useHistory();
   const [error, setError] = useState("");
   const [cookie, setCookie] = useCookies(["accessToken"]);
   const updateCookie = (props) => {
@@ -22,7 +26,6 @@ function LoginModal({ Open }) {
     });
     if (props.manager) navigate("/owner");
     if (props.serviceProvider) navigate("/acceptedRequests");
-    Open(false);
   };
 
   return (
@@ -32,23 +35,16 @@ function LoginModal({ Open }) {
         onSubmit={(values) => {
           onSubmit(values)
             .then((res) => {
-              const { id, type, role, token } = res.data;
-              const logedin = true;
-              let user =
-                type.toLowerCase() === "customer" &&
-                role.toLowerCase() === "user"
-                  ? true
-                  : false;
-
-              let serviceProvider =
-                type.toLowerCase() === "service_provider" ? true : false;
-
-              let manager =
-                type.toLowerCase() === "manager" &&
-                role.toLowerCase() === "super_admin"
-                  ? true
-                  : false;
-              console.log({});
+              const [
+                id,
+                type,
+                role,
+                token,
+                logedin,
+                user,
+                serviceProvider,
+                manager,
+              ] = onSuccess(res);
               updateCookie({
                 id,
                 type,
@@ -59,6 +55,7 @@ function LoginModal({ Open }) {
                 serviceProvider,
                 manager,
               });
+              Open(false);
             })
             .catch((err) => {
               console.log(err.response);
@@ -72,7 +69,7 @@ function LoginModal({ Open }) {
           <Heading>Login </Heading>
           <GoogleAuth
             body="Login using Google"
-            open={Open}
+            Open={Open}
             type="login"
           ></GoogleAuth>
           {error.length > 0 && <p>{error}</p>}

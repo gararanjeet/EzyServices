@@ -36,11 +36,17 @@ export const Table = ({
           zindex: "100",
         },
         Cell: ({ row }) => {
-          if (row.values.status.toLowerCase() === "pending")
-            return <Button onClick={() => setpopup(row, true)}>Assign</Button>;
-          else if (row.values.status.toLowerCase() === "completed")
+          if (
+            ["completed", "cancelled"].includes(row.values.status.toLowerCase())
+          )
             return <Button disabled={true}>Assign</Button>;
-          else return null;
+          else if (
+            ["pending", "rejected"].includes(row.values.status.toLowerCase())
+          )
+            return <Button onClick={() => setpopup(row, true)}>Assign</Button>;
+          else {
+            return <Button onClick={() => setpopup(row, true)}>Modify</Button>;
+          }
         },
       },
     ]);

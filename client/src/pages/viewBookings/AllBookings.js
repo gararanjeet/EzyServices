@@ -30,13 +30,17 @@ function AllBookings() {
     <AllBooking>
       <Title>All your Bookings</Title>
       <Container>
-        {data.map((bookings) => (
-          <BookingCard
-            info={bookings}
-            key={bookings.booking_uid}
-            refresh={setRefresh}
-          ></BookingCard>
-        ))}
+        {data.length > 0 ? (
+          data.map((bookings) => (
+            <BookingCard
+              info={bookings}
+              key={bookings.booking_uid}
+              refresh={setRefresh}
+            ></BookingCard>
+          ))
+        ) : (
+          <Empty>No booking Done</Empty>
+        )}
       </Container>
     </AllBooking>
   );
@@ -70,35 +74,14 @@ const Container = styled.div`
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
+  padding: 3rem;
+`;
 
-  /* @media (min-width: 35rem) {
-    height: fit-content;
-    width: 90%;
-    margin: auto auto;
-    margin-top: 3rem;
-    width: min(90%, 1400px);
-    max-width: 1400px;
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
-    border: 1px solid black;
-    flex-wrap: wrap;
-  }
-  @media only screen and (min-width: 600px) {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
-  }
-
-  @media only screen and (min-width: 768px) {
-    margin-top: 9rem;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 10px;
-  }
-
-  @media only screen and (min-width: 1300px) {
-    grid-template-columns: repeat(4, 1fr);
-    gap: 10px;
-  } */
+const Empty = styled.p`
+  font-size: 7rem;
+  color: lightgray;
+  font-weight: bolder;
+  margin-top: 6rem;
 `;
 
 export default AllBookings;

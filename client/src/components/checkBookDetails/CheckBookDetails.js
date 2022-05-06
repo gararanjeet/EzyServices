@@ -41,6 +41,7 @@ function CheckBookDetails() {
       });
     if (result.data.length === 0) setNotify(true);
     if (result.data.length === 1) {
+      result.data[0].date = result.data[0].date.slice(0, 10);
       setDetails(result.data);
       setpopup(true);
     }

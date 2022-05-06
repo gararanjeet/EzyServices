@@ -43,12 +43,16 @@ function WaterServiceForm() {
   const submit = (data) => {
     data.user_id = cookie.id;
     axios
-      .post("/Booking/vehicleWaterService_create", data)
+      .post("/Booking/vehicleWaterService_create", data, {
+        headers: { token: `Barear ${cookie.token}` },
+      })
       .then((res) => {
         setSuccess(true);
         setBookingId(res.data.booking_id);
+        return false;
       })
       .catch((err) => {
+        setFailed(true);
         setBookingId("");
         console.log(err);
       });
@@ -67,7 +71,6 @@ function WaterServiceForm() {
     const getSlots = (date) => {
       if (date === "" || !date) return;
       axios.post("/FreeSlot/waterServicing", { date: date }).then((res) => {
-        console.log(res.data);
         setOptions(res.data);
       });
     };
@@ -78,7 +81,7 @@ function WaterServiceForm() {
     <>
       <Form
         onSubmit={handleSubmit((data) =>
-          displayRazorpay(data, submit, orderUrl)
+          displayRazorpay(data, submit, orderUrl, cookie.token)
         )}
       >
         <FormTitle>Booking Form</FormTitle>
@@ -228,7 +231,6 @@ function WaterServiceForm() {
 export default WaterServiceForm;
 
 const Form = styled.form`
-  flex: 1.5;
   width: 100%;
   height: 100%;
   display: flex;

@@ -1,6 +1,7 @@
 const { db } = require("../../db");
 //serviceProvider_list
 const serviceProvider_list = (req, res) => {
+  console.log(req.body, req.headers, req.query);
   db.query(
     "SELECT id, user_name, email, phone, role FROM `account` WHERE type = ? AND state = ?",
     ["SERVICE_PROVIDER", 1],

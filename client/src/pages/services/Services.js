@@ -6,33 +6,27 @@ import ServiceBanner from "../../components/serviceBanner/ServiceBanner";
 import ServiceLogo from "../../components/serviceLogo/ServiceLogo";
 import WaterServiceForm from "../../components/waterServiceForm/WaterServiceForm";
 import styled from "styled-components";
+import { paths } from "./data";
 import { useState } from "react";
 
-function Services() {
+function Services({ render }) {
   const [formVisible, setformVisible] = useState(false);
   const toggle = () => {
     setformVisible(!formVisible);
   };
 
-  // useEffect(() => {
-  //   const visible = window.localStorage.getItem("visible");
-  //   setformVisible(JSON.parse(visible));
-  // }, []);
-
-  // useEffect(() => {
-  //   window.localStorage.setItem("visible", JSON.stringify(formVisible));
-  // }, [formVisible]);
-
   return (
     <ServicesPage>
-      {/* <NavBar /> */}
       <Container>
         <ContainerLeft>
-          <ServiceLogo style={logoStyle}></ServiceLogo>
-          {/* {!formVisible ? <Button onClick={toggle}>Book Now</Button> : null} */}
+          <ServiceLogo
+            style={logoStyle}
+            logo={paths[render].logo}
+          ></ServiceLogo>
         </ContainerLeft>
-        {/* {!formVisible ? <ServiceBanner></ServiceBanner> : <WaterServiceForm />} */}
-        <WaterServiceForm></WaterServiceForm>
+        <ContainerRight>
+          {paths[render].form()}
+        </ContainerRight>
       </Container>
     </ServicesPage>
   );
@@ -95,4 +89,7 @@ const ContainerLeft = styled.div`
     margin-bottom: 3rem;
     padding: 3rem;
   }
+`;
+const ContainerRight = styled.div`
+  flex: 1.5;
 `;

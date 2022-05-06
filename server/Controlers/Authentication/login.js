@@ -1,6 +1,8 @@
 const { db } = require("../../db");
 const bcrypt = require("bcrypt");
 const { createToken } = require("../../jwt");
+const { sendMail } = require("../../mail");
+const { mailinfo } = require("../../mail_info");
 
 const login = (req, res) => {
   console.log("came here");
@@ -36,24 +38,29 @@ const googleLogin = (req, res) => {
     if (result.length > 0 && result[0].password == null) {
       const { id, type, role } = result[0];
       const token = createToken({ id, type, role });
-      return res.send({
-        message: "success",
-        id: id,
-        type: type,
-        user_name: user_name,
-        accessToken: token,
-        role: role,
-      });
+      return res.send({ id, type, role, token });
     } else if (result.length == 0) {
       db.query(
         "INSERT INTO account (user_name, email, type, role) VALUES(?, ?, ?, ?)",
         [username, email, type, user],
         (err, results) => {
-          if (err)
-            return res
-              .status(500)
-              .send({ message: "Error in serving the request" });
-          else return res.send({ message: "success" });
+          if (err) return res.status(500).send(err);
+          sendMail({
+            to: email,
+            subject: mailinfo.UserRegister.subject,
+            text: mailinfo.UserRegister.text,
+          });
+          db.query(
+            "SELECT * FROM account WHERE email = ?",
+            [email],
+            (err, result) => {
+              if (result.length > 0 && result[0].password == null) {
+                const { id, type, role } = result[0];
+                const token = createToken({ id, type, role });
+                return res.send({ id, type, role, token });
+              }
+            }
+          );
         }
       );
     } else return res.status(400).send({ message: "Email under use" });

@@ -1,6 +1,7 @@
 const { verify } = require("jsonwebtoken");
 
 const verifyCustomer = (req, res, next) => {
+  console.log(req.body, req.headers);
   let { token } = req.headers;
   token = token.split(" ")[1];
   if (!token) return res.status(400).send("AccessDenied");

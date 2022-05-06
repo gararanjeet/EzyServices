@@ -4,6 +4,8 @@ import styled from "styled-components";
 import ServiceBanner from "../../components/serviceBanner/ServiceBanner";
 import ServiceLogo from "../../components/serviceLogo/ServiceLogo";
 import { Outlet, Link } from "react-router-dom";
+import houseKeeping from "../../images/HouseKeeping/houseCleaningLogo.svg";
+import houseKeepingBanner from "../../images/HouseKeeping/HouseCleaningbBanner.svg";
 
 function Home() {
   return (
@@ -15,10 +17,10 @@ function Home() {
             <Link to="/waterservices" style={linkStyle}>
               <ServiceLogo style={LogoStyle}></ServiceLogo>
             </Link>
-            <Link to="/waterservices" style={linkStyle}>
-              <ServiceLogo style={LogoStyle}></ServiceLogo>
+            <Link to="/houseCleaning" style={linkStyle}>
+              <ServiceLogo style={LogoStyle} logo={houseKeeping}></ServiceLogo>
             </Link>
-            <Link to="/waterservices" style={linkStyle}>
+            <Link to="/waterservices" className="image-link" style={linkStyle}>
               <ServiceLogo style={LogoStyle}></ServiceLogo>
             </Link>
           </Row>
@@ -28,9 +30,21 @@ function Home() {
             </Link>
           </Row>
         </ServiceLogos>
-        <ServiceCarasoul>
-          <ServiceBanner></ServiceBanner>
-        </ServiceCarasoul>
+        <ContainerRight>
+          <ServiceCarasoul>
+            <Banners>
+              <Image>
+                <ServiceBanner></ServiceBanner>
+              </Image>
+              <Image>
+                <ServiceBanner banner={houseKeepingBanner}></ServiceBanner>
+              </Image>
+              <Image>
+                <ServiceBanner></ServiceBanner>
+              </Image>
+            </Banners>
+          </ServiceCarasoul>
+        </ContainerRight>
       </Container>
     </HomePage>
   );
@@ -86,9 +100,43 @@ const ServiceLogos = styled.div`
   flex: 1;
 `;
 
-const ServiceCarasoul = styled.div`
+const ContainerRight = styled.div`
   flex: 1;
   display: flex;
+  align-items: center;
+`;
+
+const ServiceCarasoul = styled.div`
+  flex: 1;
+  overflow: hidden;
+`;
+
+const Banners = styled.div`
+  width: 300%;
+  position: relative;
+  left: 0;
+  display: flex;
+  animation: 5s slider infinite;
+  @keyframes slider {
+    0% {
+      left: 0;
+    }
+    45% {
+      left: 0;
+    }
+    50% {
+      left: -100%;
+    }
+    95% {
+      left: -100%;
+    }
+    100% {
+      left: -200%;
+    }
+  }
+`;
+const Image = styled.div`
+  width: 33.3%;
 `;
 
 const linkStyle = {

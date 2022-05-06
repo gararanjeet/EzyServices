@@ -1,10 +1,13 @@
 const { verify } = require("jsonwebtoken");
 
 const verifySuperAdmin = (req, res, next) => {
-  const { accessToken } = req.body;
-  if (!accessToken) return res.status(400).send("AccessDenied");
+  console.log(req.body, req.headers, req.query);
+  let { token } = req.headers;
+  token = token.split(" ")[1];
+  console.log("came here");
+  if (!token) return res.status(400).send("AccessDenied");
   try {
-    const validToken = verify(accessToken, process.env.ACCESS_TOKEN_SCRET);
+    const validToken = verify(token, process.env.ACCESS_TOKEN_SCRET);
     if (validToken.type === "MANAGER" && validToken.role === "SUPER_ADMIN") {
       console.log(validToken);
       return next();

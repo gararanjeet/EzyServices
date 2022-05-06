@@ -1,4 +1,6 @@
 const { db } = require("../../db");
+const { sendMail } = require("../../mail");
+const { mailinfo } = require("../../mail_info");
 
 const getId = () => {
   const date = new Date();
@@ -14,11 +16,11 @@ const booking_vehicleWaterService_create = async (req, res) => {
     req.body;
   slot = slot.split("-")[0];
   const service_id = 1;
-
   db.query("SELECT * FROM account WHERE ID = ?", [user_id], (err, result) => {
     if (err) return res.status(500).send(err);
-    if (result.length !== 1) return resp.status(400).send("user Doesnt Exist");
+    if (result.length !== 1) return res.status(400).send("user Doesnt Exist");
 
+    const user_email = result[0].email;
     db.query(
       "SELECT id FROM sub_service WHERE name = ?",
       [vehicle],
@@ -58,8 +60,14 @@ const booking_vehicleWaterService_create = async (req, res) => {
                     if (err) return res.status(500).send(err);
                     db.query(
                       "INSERT INTO `booking_status` (booking_id, status, status_by) VALUES(?,?,?)",
-                      [result.id, "PENDING", user_id],
+                      [result[0].id, "PENDING", user_id],
                       (err, result) => {
+                        if (err) return res.status(500).send(err);
+                        sendMail({
+                          to: user_email,
+                          subject: mailinfo.WaterService.subject,
+                          text: mailinfo.WaterService.text,
+                        });
                         res.send({
                           message: "Booking Successfull",
                           booking_id: booking_uid,

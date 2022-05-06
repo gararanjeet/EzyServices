@@ -1,5 +1,6 @@
 const express = require("express");
 const { verifyCustomer } = require("../Middleware/VerifyCustomer");
+const { verifySuperAdmin } = require("../Middleware/VerifySuperAdmin");
 
 const {
   booking_vehicleWaterService_create,
@@ -14,17 +15,19 @@ const { booking_delete } = require("../Controlers/Bookings/delete_booking");
 const {
   booking_details,
 } = require("../Controlers/Bookings/sinigle_booking_details");
+const { verify } = require("jsonwebtoken");
 
 const Bookings = express.Router();
 
-Bookings.get("/list", bookings_list);
+Bookings.get("/list", verifySuperAdmin, bookings_list);
 
 Bookings.post(
   "/vehicleWaterService_create",
+  verifyCustomer,
   booking_vehicleWaterService_create
 );
 
-Bookings.delete("/delete", booking_delete);
+Bookings.delete("/delete", verifyCustomer, booking_delete);
 
 Bookings.get("/list_user", verifyCustomer, bookings_list_user);
 

@@ -1,6 +1,9 @@
 import axios from "../../components/axios";
+
 const deleteUser = (id) => {
-  axios.delete("/ServiceProvider/delete", { data: { id } });
+  axios.delete("/ServiceProvider/delete", {
+    data: { id },
+  });
   return true;
 };
 

@@ -5,6 +5,7 @@ import axios from "../../components/axios";
 import { COLUMNS } from "./columns";
 import Modal from "react-modal";
 import BookingDetails from "../../components/modals/BookingDetails";
+import { useCookies } from "react-cookie";
 
 const DateFormat = (data) => {
   data.forEach((element) => {
@@ -23,6 +24,7 @@ function BookingManagement() {
   const [details, setDetails] = useState();
   const [assign, setAssignment] = useState(false);
   const [refresh, setRefresh] = useState(0);
+  const [cookie] = useCookies();
 
   const filter = () => {
     let info = data;
@@ -49,7 +51,11 @@ function BookingManagement() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const result = await axios.get("/Booking/list");
+      const result = await axios.get("/Booking/list", {
+            headers: {
+              token: `Barear ${cookie.token}`,
+            },
+          });
       const formatedData = DateFormat(result.data);
       await setData(formatedData);
     };

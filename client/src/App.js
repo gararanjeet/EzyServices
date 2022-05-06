@@ -14,8 +14,13 @@ import { RequireAuth, HomeAuth } from "./components/requireAuth/RequireAuth";
 import AcceptedRequests from "./pages/acceptedRequests/AcceptedRequests";
 import PendingRequests from "./pages/pendingRequests/PendingRequests";
 import CompletedRequests from "./pages/completedRequests/CompletedRequests";
+import { useEffect } from "react";
 
 function App() {
+  useEffect(() => {
+    document.title = "EzyServices";
+  }, []);
+
   return (
     <Router>
       <NavBar></NavBar>
@@ -25,7 +30,14 @@ function App() {
         <Route path="/" element={<Home />} />
         {/* </Route> */}
         <Route element={<RequireAuth allowed={"user"} />}>
-          <Route path="/waterservices" element={<Services />} />
+          <Route
+            path="/waterservices"
+            element={<Services render={"waterservicing"} />}
+          />
+          <Route
+            path="/houseCleaning"
+            element={<Services render={"houseCleaning"} />}
+          />
           <Route path="/viewbookings" element={<ViewBookings />} />
           <Route path="/allbookings" element={<AllBookings />}></Route>
         </Route>

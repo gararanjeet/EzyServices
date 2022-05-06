@@ -9,7 +9,7 @@ let initialValues = {
   password: "",
   confirmPassword: "",
   role: "USER",
-  type: "COUSTMER",
+  type: "CUSTOMER",
 };
 
 const onSubmit = (values) => {

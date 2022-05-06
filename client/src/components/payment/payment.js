@@ -1,14 +1,22 @@
 import axios from "../axios";
+import logo from "../../images/Logo.svg";
 
 //info -> data filled in the form
 //submit -> handle submit function
 //url -> url to create a payment order and get details from server
+//token -> accesstoken
 
-const displayRazorpay = async (info, submit, orderUrl) => {
+const displayRazorpay = async (info, submit, orderUrl, token) => {
   const res = await loadRazorpay();
   if (!res) return alert("there is an error");
-
-  const data = await axios.post(orderUrl);
+  console.log(token);
+  const data = await axios.post(
+    orderUrl,
+    {},
+    {
+      headers: { token: `Barear ${token}` },
+    }
+  );
   console.log(data.data);
   var options = {
     key: "rzp_test_51sJpmbPGsV2Nb", // Enter the Key ID generated from the Dashboard
@@ -16,7 +24,7 @@ const displayRazorpay = async (info, submit, orderUrl) => {
     currency: data.data.currency,
     name: "EzyServices",
     // description: "Test Transaction",
-    image: "https://example.com/your_logo",
+    image: logo,
     order_id: data.data.id,
     handler: (obj) => {
       console.log(obj);

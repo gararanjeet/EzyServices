@@ -1,8 +1,0 @@
-{
-    "waterService":{
-        "banner": "./waterServiceBanner.svg",
-        "logo" : "./waterServiceLogo.svg",
-        "pop-up" : "component-path"
-    }
-
-}

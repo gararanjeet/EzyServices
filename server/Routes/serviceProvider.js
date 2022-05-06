@@ -24,16 +24,17 @@ const {
 const {
   serviceProvider_completed_list,
 } = require("../Controlers/ServiceProviders/completed");
+const { verifySuperAdmin } = require("../Middleware/VerifySuperAdmin");
 
 const ServiceProvider = express.Router();
 // get all serviceProviders
-ServiceProvider.get("/list", serviceProvider_list);
+ServiceProvider.get("/list", verifySuperAdmin, serviceProvider_list);
 
 // delete serviceProvider
 ServiceProvider.delete("/delete", serviceProvider_delete);
 
 //assign a booking to serviceProvider
-ServiceProvider.post("/assign", serviceProvider_assign);
+ServiceProvider.post("/assign", verifySuperAdmin, serviceProvider_assign);
 
 //get all booking which are in awaiting state for a serviceProvider
 ServiceProvider.get("/awaiting", serviceProvider_awaiting_list);
@@ -41,7 +42,7 @@ ServiceProvider.get("/awaiting", serviceProvider_awaiting_list);
 //get all booking accepted by a serviceProvider
 ServiceProvider.get("/accepted", serviceProvider_accepted_list);
 
-//decision is pending by serviceProvider Accept or Reject the assigned service
+//to accept or reject a booking
 ServiceProvider.patch("/decision", serviceProvider_decision);
 
 //get all booking completed by a serviceProvider

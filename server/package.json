@@ -19,6 +19,7 @@
     "express-sessions": "^1.0.6",
     "jsonwebtoken": "^8.5.1",
     "mysql2": "^2.3.3",
+    "nodemailer": "^6.7.5",
     "razorpay": "^2.8.1"
   },
   "devDependencies": {
