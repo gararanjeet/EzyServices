@@ -6,7 +6,6 @@ const saltRounds = 10;
 
 const register = (req, res) => {
   const { username, email, phone, password, type, role } = req.body;
-  console.log(req.body);
 
   db.query("SELECT * FROM account where email = ?", [email], (err, result) => {
     if (err)

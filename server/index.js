@@ -10,7 +10,6 @@ const { Services } = require("./Routes/services.js");
 const { Price } = require("./Routes/price.js");
 const { Payment } = require("./Routes/payments.js");
 
-
 require("dotenv").config();
 const app = express();
 app.use(express.json());
@@ -32,7 +31,10 @@ app.use("/Price", Price);
 
 app.use("/Payment", Payment);
 
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static("client/build"));
+}
 
-app.listen(8000, () => {
+app.listen(process.env.PORT || 8000, () => {
   console.log("Servere is running");
 });

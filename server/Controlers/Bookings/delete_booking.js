@@ -2,7 +2,6 @@ const { db } = require("../../db");
 
 const booking_delete = (req, res) => {
   const { booking_id, id } = req.body;
-  console.log(booking_id, id);
   db.query(
     "UPDATE booking SET `status` = ? WHERE id = ? ",
     ["CANCELLED", booking_id],

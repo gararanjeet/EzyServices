@@ -2,7 +2,6 @@ const { db } = require("../../db");
 const { razorpay } = require("../../razorpay"); //razorpay instance
 
 const waterServicing_order_create = (req, res) => {
-  console.log(req.body, req.headers);
   const { subservice } = req.params;
   const payment_capture = 1;
   const currency = "INR";
@@ -22,14 +21,14 @@ const waterServicing_order_create = (req, res) => {
       razorpay.orders
         .create(options)
         .then((response) => {
-          res.json({
+          return res.json({
             id: response.id,
             currency,
             amount,
           });
         })
         .catch((err) => {
-          console.log;
+          return res.status(500).send;
         });
     }
   );

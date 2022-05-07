@@ -5,7 +5,6 @@ const { sendMail } = require("../../mail");
 const { mailinfo } = require("../../mail_info");
 
 const login = (req, res) => {
-  console.log("came here");
   const { email, password } = req.body;
   db.query("SELECT * FROM account WHERE email = ?", [email], (err, result) => {
     if (err)
@@ -17,7 +16,6 @@ const login = (req, res) => {
         if (match) {
           const { id, type, role } = result[0];
           const token = createToken({ id, type, role });
-          console.log("into login");
           return res.send({ id, type, role, token });
         } else
           res

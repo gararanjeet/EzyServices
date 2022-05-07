@@ -17,11 +17,7 @@ const sendMail = async (details) => {
   };
 
   try {
-    const result = await transport.sendMail(mailOptions);
-    console.log(result);
-    console.log("helll");
-  } catch {
-    (err) => console.log(err);
-  }
+    await transport.sendMail(mailOptions);
+  } catch {}
 };
 module.exports = { sendMail };

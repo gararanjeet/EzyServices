@@ -7,7 +7,6 @@ const bookings_list_user = (req, res) => {
     [id],
     (err, result) => {
       if (err) return res.status(500).send(err);
-      // console.table(result);
       res.send(result);
     }
   );
