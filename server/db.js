@@ -1,19 +1,15 @@
-const mysql = require("mysql2");
-require("dotenv").config();
+const mongoose = require("mongoose");
 
-const db = mysql.createConnection({
-  user: process.env.DB_USER_NAME,
-  host: process.env.DB_HOST,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME,
-});
+// replace the uri string with your connection string.
+const uri =
+  "mongodb+srv://root:1234@cluster0.wncwj.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
 
-db.connect((err) => {
-  if (!err) {
-    console.log("Connected Succefully");
-  } else {
-    console.log(err);
-  }
-});
-
-module.exports = { db };
+try {
+  mongoose.connect(
+    uri,
+    { useNewUrlParser: true, useUnifiedTopology: true },
+    () => console.log(" Mongoose is connected")
+  );
+} catch (e) {
+  console.log("could not connect");
+}
