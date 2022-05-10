@@ -10,12 +10,12 @@ function AcceptedRequests() {
   const { id, token } = cookies;
 
   const HandleComplete = async (info) => {
-    const booking_id = info.id;
+    const bookingId = info._id;
     try {
       axios.patch("/Service/vehicleWaterServicing_complete", {
         headers: { token: `Barers ${token}` },
-        serviceProvider_id: id,
-        booking_id,
+        serviceProviderId: id,
+        bookingId,
       });
       fetchData();
     } catch {

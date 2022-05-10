@@ -199,7 +199,7 @@ function WaterServiceForm() {
         {amount && (
           <Lable>
             Amount
-            <Input value={amount} readOnly />
+            <Input {...register("price")} value={amount} readOnly />
           </Lable>
         )}
         <Button>Book Now</Button>

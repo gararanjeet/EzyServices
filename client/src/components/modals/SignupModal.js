@@ -42,8 +42,8 @@ function SignupModal({ Open, registerServiceProvider }) {
             type="register"
           ></GoogleAuth> */}
           <Lable>UserName</Lable>
-          <ErrorMessage name="username" />
-          <Field name="username" type="text" style={styleInput} />
+          <ErrorMessage name="userName" />
+          <Field name="userName" type="text" style={styleInput} />
           <Lable>Email</Lable>
           <ErrorMessage name="email" />
           <Field name="email" type="email" style={styleInput} />

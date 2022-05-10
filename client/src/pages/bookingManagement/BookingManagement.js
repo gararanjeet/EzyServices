@@ -9,9 +9,14 @@ import { useCookies } from "react-cookie";
 
 const DateFormat = (data) => {
   data.forEach((element) => {
-    element.date = element.date.slice(0, 10);
+    element.serviceDate = element.serviceDate.slice(0, 10);
   });
   return data;
+};
+
+const addIndex = (rows) => {
+  rows.forEach((row, index) => (row.index = index + 1));
+  return rows;
 };
 
 function BookingManagement() {
@@ -33,16 +38,17 @@ function BookingManagement() {
         (element) => element.status.toLowerCase() === statusFilter.toLowerCase()
       );
     }
-    console.log("info", info);
     if (dateFilter !== "") {
       info = info.filter((element) => element.date === dateFilter);
     }
-    setFilterData(info);
+    setFilterData(addIndex(info));
   };
 
   useEffect(() => {
     if (detailsId === "") return;
-    setDetails(data.filter((element) => element.booking_uid === detailsId));
+    console.log("details run");
+    setDetails(data.filter((element) => element.bookingUid === detailsId));
+    console.log("run success");
   }, [detailsId]);
 
   useEffect(() => {
@@ -52,12 +58,12 @@ function BookingManagement() {
   useEffect(() => {
     const fetchData = async () => {
       const result = await axios.get("/Booking/list", {
-            headers: {
-              token: `Barear ${cookie.token}`,
-            },
-          });
+        headers: {
+          token: `Barear ${cookie.token}`,
+        },
+      });
       const formatedData = DateFormat(result.data);
-      await setData(formatedData);
+      setData(formatedData);
     };
     fetchData();
   }, [refresh]);

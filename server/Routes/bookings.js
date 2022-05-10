@@ -15,7 +15,6 @@ const { booking_delete } = require("../Controlers/Bookings/delete_booking");
 const {
   booking_details,
 } = require("../Controlers/Bookings/sinigle_booking_details");
-const { verify } = require("jsonwebtoken");
 
 const Bookings = express.Router();
 

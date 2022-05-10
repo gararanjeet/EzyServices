@@ -4,7 +4,7 @@ import styled from "styled-components";
 function ServiceProviderCard({ data, HandleComplete, Accepted, HandleAction }) {
   return (
     <Card>
-      <Uid>{data.booking_uid}</Uid>
+      <Uid>{data.bookinguid}</Uid>
       <Container>
         <Details>
           <Name>{data.name}</Name>
@@ -12,7 +12,7 @@ function ServiceProviderCard({ data, HandleComplete, Accepted, HandleAction }) {
           <Address>{data.address}</Address>
         </Details>
         <TimeSlot>
-          <Date>{data.date.slice(0, 10)}</Date>
+          <Date>{data.serviceDate.slice(0, 10)}</Date>
           <Slot>{data.slot}</Slot>
         </TimeSlot>
       </Container>

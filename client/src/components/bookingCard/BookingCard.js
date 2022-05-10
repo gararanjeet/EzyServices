@@ -6,27 +6,26 @@ import { useCookies } from "react-cookie";
 function BookingCard({ info, refresh }) {
   const [cookie] = useCookies();
   const {
-    booking_id,
-    booking_uid,
-    end,
-    start,
+    bookingUid,
+    slot,
     price,
     service,
-    service_date,
-    sub_service,
+    serviceDate,
+    subService,
     status,
-    assigned,
+    assignedName,
   } = info;
-
+  const bookingId = info._id
   const HandleSubmit = async () => {
     try {
+      // console.log("clicked");
       await axios.delete("/Booking/delete", {
         headers: { token: `Barer ${cookie.token}` },
-        data: { booking_id, id: cookie.id },
+        data: { bookingId, id: cookie.id },
       });
       refresh((count) => count + 1);
-    } catch {
-      console.log("err");
+    } catch(err) {
+      console.log(err);
     }
     console.log("modified");
   };
@@ -42,12 +41,12 @@ function BookingCard({ info, refresh }) {
         }
       >
         <Title>{service}</Title>
-        <Subtitle>{sub_service}</Subtitle>
-        <Bookinguid>{booking_uid}</Bookinguid>
+        <Subtitle>{subService}</Subtitle>
+        <Bookinguid>{bookingUid}</Bookinguid>
         <Slot>
-          <span>{service_date.slice(0, 10)}</span>
+          <span>{serviceDate.slice(0, 10)}</span>
           <span>
-            {start.slice(0, 5)} - {end.slice(0, 5)}
+            {slot}
           </span>
         </Slot>
         <Status>{status}</Status>

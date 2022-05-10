@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import styled from "styled-components";
 import axios from "../axios";
 import { useCookies } from "react-cookie";
@@ -10,8 +10,10 @@ function BookingDetails({ data, open, assign, setRefresh }) {
   const [cookie] = useCookies();
 
   const SelectProvider = (id) => {
+    console.log("provider");
     try {
-      let provider = serviceProviders.filter((obj) => obj.id == id);
+      console.log(id);
+      let provider = serviceProviders.filter((obj) => obj._id == id);
       setServiceProvider(provider[0]);
       setPhone(provider[0].phone);
     } catch {
@@ -21,7 +23,7 @@ function BookingDetails({ data, open, assign, setRefresh }) {
   };
 
   // const name = data.service;
-  const fetchData = async ({ setServiceProviders }) => {
+  const fetchData = async () => {
     const result = await axios.get("/ServiceProvider/list", {
       headers: { token: `Barear ${cookie.token}` },
       params: { service: data.service },
@@ -30,8 +32,8 @@ function BookingDetails({ data, open, assign, setRefresh }) {
   };
 
   const onSubmit = async () => {
-    const booking_id = data.id;
-    const serviceProvider_id = serviceProvider.id;
+    const booking_id = data._id;
+    const serviceProvider_id = serviceProvider._id;
     if (!serviceProvider_id) alert("Please select service Provider");
     else {
       await axios
@@ -56,9 +58,10 @@ function BookingDetails({ data, open, assign, setRefresh }) {
   };
 
   useEffect(() => {
-    if (assign) fetchData({ setServiceProviders });
+    if (assign) fetchData();
   }, [assign]);
 
+  console.log(data);
   data = data[0];
   console.log(data);
   return (
@@ -66,7 +69,7 @@ function BookingDetails({ data, open, assign, setRefresh }) {
       <Title>{assign ? "Job Card" : "Booking Details"}</Title>
       <Row>
         <Key>Booking Id :</Key>
-        <Value> {data.booking_uid}</Value>
+        <Value> {data.bookingUid}</Value>
       </Row>
       <Row>
         <Key>Name :</Key>
@@ -78,7 +81,7 @@ function BookingDetails({ data, open, assign, setRefresh }) {
       </Row>
       <Row>
         <Key>Mail :</Key>
-        <Value>{data.mail}</Value>
+        <Value>{data.email}</Value>
       </Row>
       <Row>
         <Key>Slot :</Key>
@@ -86,7 +89,7 @@ function BookingDetails({ data, open, assign, setRefresh }) {
       </Row>
       <Row>
         <Key>Date :</Key>
-        <Value>{data.date}</Value>
+        <Value>{data.serviceDate}</Value>
       </Row>
       <Row>
         <Key>Address :</Key>
@@ -102,12 +105,12 @@ function BookingDetails({ data, open, assign, setRefresh }) {
       </Row>
       <Row>
         <Key>Sub service :</Key>
-        <Value>{data.sub_service}</Value>
+        <Value>{data.subService}</Value>
       </Row>
       {!assign && (
         <Row>
           <Key>Assigned to :</Key>
-          <Value>{data.assigned_name}</Value>
+          <Value>{data.assignedName}</Value>
         </Row>
       )}
       {assign && (
@@ -118,8 +121,8 @@ function BookingDetails({ data, open, assign, setRefresh }) {
               <Select onChange={(e) => SelectProvider(e.target.value)}>
                 <option>Select</option>
                 {serviceProviders.map((user, index) => (
-                  <option key={index} value={user.id}>
-                    {user.user_name}
+                  <option key={index} value={user._id}>
+                    {user.userName}
                   </option>
                 ))}
               </Select>
@@ -157,7 +160,7 @@ const Title = styled.h1`
 const Key = styled.p`
   font-size: 1.3rem;
   font-weight: 500;
-  flex: 1;
+  flex: 0.75;
   padding-right: 2rem;
   text-align: right;
 `;

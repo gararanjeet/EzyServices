@@ -1,15 +1,14 @@
 const mongoose = require("mongoose");
+require("dotenv").config();
 
 // replace the uri string with your connection string.
-const uri =
-  "mongodb+srv://root:1234@cluster0.wncwj.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
-
+const uri = process.env.DB_LOCAL_URL;
 try {
   mongoose.connect(
     uri,
     { useNewUrlParser: true, useUnifiedTopology: true },
-    () => console.log(" Mongoose is connected")
+    () => console.log("Mongoose is connected")
   );
 } catch (e) {
-  console.log("could not connect");
+  console.log("could not connect", e);
 }

@@ -18,7 +18,7 @@ const Heading = styled.h1`
 `;
 
 function CheckBookDetails() {
-  const [booking_uid, setBooking_uid] = useState();
+  const [bookingUid, setBookingUid] = useState();
   const [cookie] = useCookies();
   const { id, token } = cookie;
   const [details, setDetails] = useState();
@@ -30,20 +30,21 @@ function CheckBookDetails() {
   };
 
   const fetchDetails = async () => {
-    const result = await axios
-      .get("/Booking/singleBookingDetails", {
+    try {
+      const result = await axios.get("/Booking/singleBookingDetails", {
         headers: { token: `Barear ${token}` },
-        params: { booking_uid, id },
-      })
-      .catch((err) => {
-        alert("error occurecd");
-        console.log(err);
+        params: { bookingUid, id },
       });
-    if (result.data.length === 0) setNotify(true);
-    if (result.data.length === 1) {
-      result.data[0].date = result.data[0].date.slice(0, 10);
-      setDetails(result.data);
-      setpopup(true);
+      console.log(result);
+      if (result.data.length === 0) setNotify(true);
+      if (result.data.length === 1) {
+        result.data[0].serviceDate = result.data[0].serviceDate.slice(0, 10);
+        setDetails(result.data);
+        setpopup(true);
+      }
+    } catch (err) {
+      alert("error occurecd");
+      console.log(err);
     }
   };
 
@@ -55,7 +56,7 @@ function CheckBookDetails() {
         <Input
           type="text"
           onChange={(e) => {
-            setBooking_uid(e.target.value);
+            setBookingUid(e.target.value);
           }}
         />
         <Button onClick={(e) => HandleSubmit(e)}>View Details</Button>

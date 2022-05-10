@@ -1,6 +1,12 @@
 const { db } = require("../../db");
 const { sendMail } = require("../../mail");
 const { mailinfo } = require("../../mail_info");
+const Account = require("../../Models/Account");
+const Order = require("../../Models/Order");
+const OrderStatus = require("../../Models/OrderStatus");
+const Service = require("../../Models/Service");
+const Slot = require("../../Models/Slot");
+const SubService = require("../../Models/SubService");
 
 const getId = () => {
   const date = new Date();
@@ -12,77 +18,60 @@ const getId = () => {
 };
 // booking_vehicleWaterService_create
 const booking_vehicleWaterService_create = async (req, res) => {
-  let { user_id, name, phone, email, vehicle, modal, date, slot, address } =
-    req.body;
-  slot = slot.split("-")[0];
-  const service_id = 1;
-  db.query("SELECT * FROM account WHERE ID = ?", [user_id], (err, result) => {
-    if (err) return res.status(500).send(err);
-    if (result.length !== 1) return res.status(400).send("user Doesnt Exist");
+  let {
+    user_id,
+    name,
+    phone,
+    email,
+    vehicle,
+    modal,
+    date,
+    slot,
+    address,
+    price,
+  } = req.body;
+  try {
+    const user = await Account.findOne({ _id: user_id });
+    if (user.length === 0) return res.status(400).send("user doesnt exist");
 
-    const user_email = result[0].email;
-    db.query(
-      "SELECT id FROM sub_service WHERE name = ?",
-      [vehicle],
-      (err, result) => {
-        if (err) return res.status(500).send(err);
-        const sub_service_id = result[0].id;
+    const order = new Order({
+      bookingUid: getId(),
+      service: "VEHICLE_WATER_SERVICING",
+      subService: vehicle,
+      serviceDate: date,
+      slot,
+      address,
+      accountId: user_id,
+      name,
+      phone,
+      email,
+      status: "PENDING",
+      price,
+    });
 
-        db.query(
-          "SELECT id FROM slot WHERE start = ?",
-          [slot],
-          (err, result) => {
-            if (err) return res.status(500).send(err);
-            const slot_id = result[0].id;
-            const status = "pending";
-            const booking_uid = getId();
-            db.query(
-              "INSERT INTO booking (booking_uid, service_id, sub_service_id, service_date, slot_id, address, account_id, name, phone_no, mail, status) VALUES(?,?,?,?,?,?,?,?,?,?,?)",
-              [
-                booking_uid,
-                service_id,
-                sub_service_id,
-                date,
-                slot_id,
-                address,
-                user_id,
-                name,
-                phone,
-                email,
-                status,
-              ],
-              (err, result) => {
-                if (err) return res.status(500).send(err);
-                db.query(
-                  "SELECT id FROM `booking` WHERE `booking_uid` = ?",
-                  [booking_uid],
-                  (err, result) => {
-                    if (err) return res.status(500).send(err);
-                    db.query(
-                      "INSERT INTO `booking_status` (booking_id, status, status_by) VALUES(?,?,?)",
-                      [result[0].id, "PENDING", user_id],
-                      (err, result) => {
-                        if (err) return res.status(500).send(err);
-                        sendMail({
-                          to: user_email,
-                          subject: mailinfo.WaterService.subject,
-                          text: mailinfo.WaterService.text,
-                        });
-                        res.send({
-                          message: "Booking Successfull",
-                          booking_id: booking_uid,
-                        });
-                      }
-                    );
-                  }
-                );
-              }
-            );
-          }
-        );
-      }
-    );
-  });
+    const instered = await order.save();
+    sendMail({
+      to: user.email,
+      subject: mailinfo.WaterService.subject,
+      text: mailinfo.WaterService.text,
+    });
+
+    const orderStatus = new OrderStatus({
+      bookingId: instered._id,
+      status: "PENDING",
+      statusBy: user._id,
+    });
+
+    await orderStatus.save();
+
+    return res.send({
+      message: "Booking Successfull",
+      booking_id: instered.bookingUid,
+    });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).send(err);
+  }
 };
 
 module.exports = { booking_vehicleWaterService_create };

@@ -12,6 +12,8 @@ export const Table = ({
   setShowDetails,
   setDetailsId,
   setAssignment,
+  deleteUser,
+  setRefresh,
 }) => {
   const columns = useMemo(() => COLUMNS, [COLUMNS]);
   const data = useMemo(() => DATA, [DATA]);
@@ -20,6 +22,27 @@ export const Table = ({
     setShowDetails(true);
     setDetailsId(row.cells[0].value);
     assign && setAssignment(true);
+  };
+
+  const deleteHook = (hooks) => {
+    hooks.visibleColumns.push((columns) => [
+      ...columns,
+      {
+        id: "Delete",
+        Header: "Delete",
+        Cell: ({ row }) => (
+          <Button
+            className="danger"
+            onClick={() => {
+              const email = row.cells[3].value;
+              deleteUser(email)
+            }}
+          >
+            Delete
+          </Button>
+        ),
+      },
+    ]);
   };
 
   const tableHooks = (hooks) => {
@@ -58,6 +81,7 @@ export const Table = ({
       data,
     },
     ViewDetails === true && tableHooks,
+    !ViewDetails && deleteHook,
     usePagination
   );
 
@@ -169,6 +193,9 @@ const Button = styled.button`
   border-radius: 0.2rem;
   :hover {
     cursor: pointer;
+  }
+  &.danger {
+    background-color: #ed4e60;
   }
 `;
 

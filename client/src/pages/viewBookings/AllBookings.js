@@ -23,7 +23,6 @@ function AllBookings() {
   };
   useEffect(() => {
     fetchBookings();
-    console.log("changed");
   }, [refresh]);
 
   return (
@@ -34,7 +33,7 @@ function AllBookings() {
           data.map((bookings) => (
             <BookingCard
               info={bookings}
-              key={bookings.booking_uid}
+              key={bookings._id}
               refresh={setRefresh}
             ></BookingCard>
           ))

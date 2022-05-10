@@ -3,11 +3,11 @@ import { onDelete } from "./deleteUser";
 export const COLUMNS = [
   {
     Header: "ID",
-    accessor: "id",
+    accessor: "index",
   },
   {
     Header: "Name",
-    accessor: "user_name",
+    accessor: "userName",
   },
   {
     Header: "Role",
@@ -25,13 +25,6 @@ export const COLUMNS = [
     Header: "Edit",
     Cell: ({ row }) => (
       <ButtonBlue onClick={() => console.log(row)}>Edit</ButtonBlue>
-    ),
-  },
-
-  {
-    Header: "Delete",
-    Cell: ({ row }) => (
-      <ButtonRed onClick={() => onDelete(row.cells)}>Delete</ButtonRed>
     ),
   },
 ];

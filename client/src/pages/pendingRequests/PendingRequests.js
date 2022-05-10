@@ -11,12 +11,12 @@ function PendingRequests() {
   const { id, token } = cookies;
 
   const HandleAction = async (info, action) => {
-    const booking_id = info.id;
+    const bookingId = info._id;
     try {
       axios.patch("/serviceProvider/decision", {
         headers: { token: `Barers ${token}` },
-        serviceProvider_id: id,
-        booking_id,
+        serviceProviderId: id,
+        bookingId,
         action,
       });
       fetchData();
@@ -26,6 +26,7 @@ function PendingRequests() {
   };
 
   const fetchData = async () => {
+    console.log(id);
     const result = await axios.get("/ServiceProvider/awaiting", {
       headers: { token: `Barers ${token}` },
       params: { id },
@@ -33,6 +34,7 @@ function PendingRequests() {
     setData(result.data);
   };
   useEffect(() => fetchData(), []);
+
   return (
     <Pending>
       <Container>
@@ -40,7 +42,7 @@ function PendingRequests() {
         {data.length > 0 ? (
           data.map((order) => (
             <ServiceProviderCard
-              key={order.id}
+              key={order._id}
               data={order}
               HandleAction={HandleAction}
             ></ServiceProviderCard>

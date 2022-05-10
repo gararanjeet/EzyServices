@@ -10,6 +10,7 @@ const { Services } = require("./Routes/services.js");
 const { Price } = require("./Routes/price.js");
 const { Payment } = require("./Routes/payments.js");
 
+const Service = require("./Models/Service");
 
 require("dotenv").config();
 const app = express();
@@ -32,6 +33,9 @@ app.use("/Price", Price);
 
 app.use("/Payment", Payment);
 
+app.get("/hello", async (req, res) => {
+
+});
 
 app.listen(8000, () => {
   console.log("Servere is running");

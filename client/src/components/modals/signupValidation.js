@@ -18,7 +18,7 @@ const onSubmit = (values) => {
 };
 
 const validationSchema = yup.object({
-  username: yup
+  userName: yup
     .string()
     .max(30, "Name should not be greater than 15 charecters")
     .min(3, "Name should not be less than 3 charecters")

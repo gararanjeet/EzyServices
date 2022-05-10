@@ -4,7 +4,7 @@ import Div from "../../components/modals/JobCard";
 export const COLUMNS = [
   {
     Header: "Booking id",
-    accessor: "booking_uid",
+    accessor: "bookingUid",
   },
   {
     Header: "Address",
@@ -16,7 +16,7 @@ export const COLUMNS = [
   },
   {
     Header: "Date",
-    accessor: "date",
+    accessor: "serviceDate",
   },
   {
     Header: "Slot",

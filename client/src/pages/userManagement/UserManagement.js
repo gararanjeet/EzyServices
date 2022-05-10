@@ -6,6 +6,12 @@ import Modal from "react-modal";
 import axios from "../../components/axios";
 import SignupModal from "../../components/modals/SignupModal";
 import { useCookies } from "react-cookie";
+import { setIn } from "formik";
+
+const addIndex = (rows) => {
+  rows.forEach((row, index) => (row.index = index + 1));
+  return rows;
+};
 
 function UserManagement() {
   const [data, setData] = useState([]);
@@ -14,16 +20,31 @@ function UserManagement() {
   const [filterBy, setFilterBy] = useState("");
   const [filteredData, setFilteredData] = useState([]);
   const [cookie] = useCookies();
+  const [refresh, setRefresh] = useState(0);
 
-  const funct = () => {
-    console.log("hello");
+  const deleteUser = async (email) => {
+    try {
+      await axios.delete("/ServiceProvider/delete", {
+        data: { email },
+      });
+      window.location.reload();
+      return true;
+    } catch (err) {
+      console.log(err);
+      return false;
+    }
   };
 
   useEffect(() => {
-    console.log("value changed", filterBy);
-    if (filterBy === "") setFilteredData(data);
-    else setFilteredData(data.filter((obj) => obj.role === filterBy));
+    let unOrderd = data;
+
+    // if (filterBy === "") setFilteredData(data);
+    if (filterBy !== "") unOrderd = data.filter((obj) => obj.role === filterBy);
+
+    setFilteredData(addIndex(unOrderd));
   }, [filterBy]);
+
+  useEffect(() => console.log(filteredData, "hello"), [filteredData]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -33,7 +54,7 @@ function UserManagement() {
         })
         .catch((err) => console.log(err));
       setData(result.data);
-      setFilteredData(result.data);
+      setFilteredData(addIndex(result.data));
     };
 
     const fetchServices = async () => {
@@ -46,8 +67,8 @@ function UserManagement() {
     fetchServices();
   }, []);
 
-  console.log(data);
-  console.log(services);
+  console.log(data, "data");
+  console.log(services, "services");
   return (
     <UserManangementPage>
       <Container>
@@ -56,14 +77,19 @@ function UserManagement() {
           <Input onChange={(e) => setFilterBy(e.target.value)}>
             <option value={""}>All</option>
             {services.map((service) => (
-              <option key={service.name}>{service.name}</option>
+              <option key={service}>{service}</option>
             ))}
           </Input>
           <AddUser onClick={() => setRegisterpopup(true)}>Add User </AddUser>
         </AccessBar>
 
         <TableContainer>
-          <Table COLUMNS={COLUMNS} DATA={filteredData}></Table>
+          <Table
+            COLUMNS={COLUMNS}
+            DATA={filteredData}
+            deleteUser={deleteUser}
+            setRefresh={setRefresh}
+          ></Table>
         </TableContainer>
       </Container>
       <Modal
