@@ -33,10 +33,14 @@ app.use("/Price", Price);
 
 app.use("/Payment", Payment);
 
-app.get("/hello", async (req, res) => {
-
+app.get("/test", (req, res) => {
+  res.send("working");
 });
 
-app.listen(8000, () => {
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static("client/build"));
+}
+
+app.listen(process.env.PORT || 8000, () => {
   console.log("Servere is running");
 });
