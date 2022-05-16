@@ -26,6 +26,7 @@ const bookings_list = async (req, res) => {
           serviceDate: 1,
           slot: 1,
           status: 1,
+          price: 1,
         },
       },
     ]);

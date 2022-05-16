@@ -15,6 +15,7 @@ const { booking_delete } = require("../Controlers/Bookings/delete_booking");
 const {
   booking_details,
 } = require("../Controlers/Bookings/sinigle_booking_details");
+const { booking_rate } = require("../Controlers/Bookings/rate");
 
 const Bookings = express.Router();
 
@@ -25,6 +26,8 @@ Bookings.post(
   verifyCustomer,
   booking_vehicleWaterService_create
 );
+
+Bookings.post("/rate", verifyCustomer, booking_rate);
 
 Bookings.delete("/delete", verifyCustomer, booking_delete);
 
