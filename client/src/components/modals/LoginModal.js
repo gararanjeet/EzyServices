@@ -3,6 +3,7 @@ import { useCookies } from "react-cookie";
 import styled from "styled-components";
 import GoogleAuth from "../googleAuth/GoogleAuth";
 import { Form, Formik, ErrorMessage, Field } from "formik";
+import logo from "../../images/Logo.svg";
 import {
   initialValues,
   onSubmit,
@@ -66,7 +67,10 @@ function LoginModal({ Open }) {
         validationSchema={validationSchema}
       >
         <Form style={{ textAlign: "center" }}>
-          <Heading>Login </Heading>
+          <HeadingContainer>
+            <Logo src={logo} alt="logo" />
+            <Heading>Login</Heading>
+          </HeadingContainer>
           <GoogleAuth
             body="Login using Google"
             Open={Open}
@@ -78,7 +82,6 @@ function LoginModal({ Open }) {
           <Field
             name="email"
             type="email"
-            placeholder="email@gmail.com"
             style={inputStyle}
           />
 
@@ -87,7 +90,6 @@ function LoginModal({ Open }) {
           <Field
             name="password"
             type="password"
-            placeholder="password"
             style={inputStyle}
           />
 
@@ -104,11 +106,20 @@ const LoginPopup = styled.div`
   color: white;
 `;
 
-const Heading = styled.h1`
-  text-align: center;
-  font-size: 3rem;
+const HeadingContainer = styled.div`
+  display: flex;
+  justify-content: flex-start;
   margin: 2rem 0;
   margin-bottom: 3rem;
+`;
+
+const Logo = styled.img`
+  margin-right: 1rem;
+  width: 10rem;
+`;
+const Heading = styled.h1`
+  text-align: center;
+  font-size: 3.5rem;
 `;
 
 const Lable = styled.label`
@@ -123,7 +134,7 @@ const inputStyle = {
   display: "block",
   fontSize: "1.3rem",
   padding: "0.5em",
-  color: "#d5d421",
+  color: "white",
   width: "85%",
   marginLeft: "1.5em",
   marginBottom: "2rem",
@@ -142,6 +153,7 @@ const Submit = styled.button`
   border-radius: 0.5rem;
   background-color: #d5d421;
   :hover {
-    color: #878787;
+    color: #565656;
+    cursor: pointer;
   }
 `;

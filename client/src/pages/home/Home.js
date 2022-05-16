@@ -1,16 +1,14 @@
-import React, { useEffect } from "react";
-import NavBar from "../../components/navBar/NavBar";
+import React from "react";
 import styled from "styled-components";
 import ServiceBanner from "../../components/serviceBanner/ServiceBanner";
 import ServiceLogo from "../../components/serviceLogo/ServiceLogo";
-import { Outlet, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import houseKeeping from "../../images/HouseKeeping/houseCleaningLogo.svg";
 import houseKeepingBanner from "../../images/HouseKeeping/HouseCleaningbBanner.svg";
 
 function Home() {
   return (
     <HomePage>
-      {/* <NavBar /> */}
       <Container>
         <ServiceLogos>
           <Row className="row">
@@ -80,7 +78,6 @@ const Container = styled.div`
 const LogoStyle = {
   width: "100%",
   flexShrink: "1",
-  // border: "1px solid black",
   "&hover": {
     border: "1px solid black",
   },
@@ -141,6 +138,5 @@ const Image = styled.div`
 
 const linkStyle = {
   textdecoration: "none",
-  // height: "100%",
   width: "30%",
 };

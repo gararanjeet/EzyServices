@@ -2,18 +2,19 @@ import React, { useEffect, useMemo, useState } from "react";
 import styled from "styled-components";
 import axios from "../axios";
 import { useCookies } from "react-cookie";
+import Rate from "../starRating/StarRating";
 
-function BookingDetails({ data, open, assign, setRefresh }) {
+function BookingDetails({ data, open, assign, setRefresh, HandleDelete }) {
   const [serviceProviders, setServiceProviders] = useState([]);
   const [serviceProvider, setServiceProvider] = useState([]);
   const [phone, setPhone] = useState("");
   const [cookie] = useCookies();
+  const [rating, setRating] = useState(0);
 
   const SelectProvider = (id) => {
-    console.log("provider");
     try {
       console.log(id);
-      let provider = serviceProviders.filter((obj) => obj._id == id);
+      let provider = serviceProviders.filter((obj) => obj._id === id);
       setServiceProvider(provider[0]);
       setPhone(provider[0].phone);
     } catch {
@@ -22,12 +23,35 @@ function BookingDetails({ data, open, assign, setRefresh }) {
     }
   };
 
+  const rateService = async () => {
+    try {
+      const result = await axios.post(
+        "/Booking/rate",
+        {
+          id: data._id,
+          rating,
+        },
+        { headers: { token: `Barear ${cookie.token}` } }
+      );
+      data.rating = rating;
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  useEffect(() => {
+    if (data.rating === undefined && rating > 0) {
+      rateService();
+    }
+  }, [rating]);
+
   // const name = data.service;
   const fetchData = async () => {
     const result = await axios.get("/ServiceProvider/list", {
       headers: { token: `Barear ${cookie.token}` },
       params: { service: data.service },
     });
+    console.log(result, "service provider");
     setServiceProviders(result.data);
   };
 
@@ -60,10 +84,7 @@ function BookingDetails({ data, open, assign, setRefresh }) {
   useEffect(() => {
     if (assign) fetchData();
   }, [assign]);
-
-  console.log(data);
-  data = data[0];
-  console.log(data);
+  console.log(assign);
   return (
     <Container>
       <Title>{assign ? "Job Card" : "Booking Details"}</Title>
@@ -107,6 +128,10 @@ function BookingDetails({ data, open, assign, setRefresh }) {
         <Key>Sub service :</Key>
         <Value>{data.subService}</Value>
       </Row>
+      <Row>
+        <Key>Price :</Key>
+        <Value>{data.price}</Value>
+      </Row>
       {!assign && (
         <Row>
           <Key>Assigned to :</Key>
@@ -140,6 +165,13 @@ function BookingDetails({ data, open, assign, setRefresh }) {
           )}
           <Button onClick={onSubmit}>Assign</Button>
         </>
+      )}
+      {HandleDelete &&
+        ["PENDING", "AWAITING", "ACCEPTED", "REJECTED"].includes(
+          data.status
+        ) && <Button onClick={(e) => HandleDelete(e)}>Cancel</Button>}
+      {data.status.toLowerCase() === "completed" && (
+        <Rate rating={data.rating || rating} onRating={setRating}></Rate>
       )}
     </Container>
   );
@@ -203,4 +235,8 @@ const Button = styled.button`
   border-radius: 5px;
   margin-top: 1rem;
   cursor: pointer;
+  :hover {
+    background-color: #565656;
+    color: white;
+  }
 `;

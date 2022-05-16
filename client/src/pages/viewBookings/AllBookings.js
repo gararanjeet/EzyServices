@@ -27,18 +27,18 @@ function AllBookings() {
 
   return (
     <AllBooking>
-      <Title>All your Bookings</Title>
+      <Title>My Bookings</Title>
       <Container>
         {data.length > 0 ? (
-          data.map((bookings) => (
+          data.map((booking) => (
             <BookingCard
-              info={bookings}
-              key={bookings._id}
+              info={booking}
+              key={booking._id}
               refresh={setRefresh}
             ></BookingCard>
           ))
         ) : (
-          <Empty>No booking Done</Empty>
+          <Empty>No bookings Done</Empty>
         )}
       </Container>
     </AllBooking>

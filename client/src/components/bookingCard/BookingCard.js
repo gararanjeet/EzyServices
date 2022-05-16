@@ -1,22 +1,19 @@
 import axios from "../axios";
-import React from "react";
+import React, { useState } from "react";
+
 import styled from "styled-components";
 import { useCookies } from "react-cookie";
+import Modal from "react-modal";
+import BookingDetails from "../modals/BookingDetails";
+import { format } from "date-fns";
 
 function BookingCard({ info, refresh }) {
   const [cookie] = useCookies();
-  const {
-    bookingUid,
-    slot,
-    price,
-    service,
-    serviceDate,
-    subService,
-    status,
-    assignedName,
-  } = info;
-  const bookingId = info._id
-  const HandleSubmit = async () => {
+  const [popup, setpopup] = useState(false);
+  const { bookingUid, slot, service, serviceDate, subService, status } = info;
+  const bookingId = info._id;
+
+  const HandleDelete = async () => {
     try {
       // console.log("clicked");
       await axios.delete("/Booking/delete", {
@@ -24,14 +21,19 @@ function BookingCard({ info, refresh }) {
         data: { bookingId, id: cookie.id },
       });
       refresh((count) => count + 1);
-    } catch(err) {
+    } catch (err) {
       console.log(err);
     }
     console.log("modified");
   };
+  console.log(info);
   return (
     <Item>
       <Card
+        onClick={(e) => {
+          e.preventDefault();
+          setpopup(true);
+        }}
         className={
           status === "CANCELLED"
             ? "cancel"
@@ -44,23 +46,22 @@ function BookingCard({ info, refresh }) {
         <Subtitle>{subService}</Subtitle>
         <Bookinguid>{bookingUid}</Bookinguid>
         <Slot>
-          <span>{serviceDate.slice(0, 10)}</span>
-          <span>
-            {slot}
-          </span>
+          <span>{format(new Date(serviceDate), "dd-mm-yy")}</span>
+          <span>{slot}</span>
         </Slot>
         <Status>{status}</Status>
-        {["PENDING", "AWAITING", "ACCEPTED", "REJECTED"].includes(status) && (
-          <Button
-            className={
-              (status === "completed" || status === "withdrawn") && "disabled"
-            }
-            onClick={(e) => HandleSubmit(e)}
-          >
-            Cancel
-          </Button>
-        )}
       </Card>
+      <Modal
+        isOpen={popup}
+        style={ModalStyle}
+        onRequestClose={() => setpopup(false)}
+      >
+        <BookingDetails
+          data={info}
+          open={setpopup}
+          HandleDelete={HandleDelete}
+        ></BookingDetails>
+      </Modal>
     </Item>
   );
 }
@@ -92,6 +93,7 @@ const Card = styled.div`
   :hover {
     transform: scale(1.03);
     transition: 0.2s ease-in-out;
+    cursor: pointer;
   }
 `;
 
@@ -150,5 +152,27 @@ const Button = styled.button`
     cursor: auto;
   }
 `;
+
+const ModalStyle = {
+  overlay: {
+    position: "fixed",
+    backgroundColor: "rgba(0, 0, 0, 0.75)",
+  },
+  content: {
+    textAlign: "center",
+    position: "absolute",
+    maxWidth: "500px",
+    height: "fit-content",
+    margin: "auto auto",
+    border: "1px solid #ccc",
+    background: "white",
+    overflow: "auto",
+    WebkitOverflowScrolling: "touch",
+    borderRadius: "2rem",
+    outline: "none",
+    padding: "20px",
+    transition: "1s easy",
+  },
+};
 
 export default BookingCard;
