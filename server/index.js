@@ -33,13 +33,8 @@ app.use("/Price", Price);
 
 app.use("/Payment", Payment);
 
-<<<<<<< Updated upstream
-app.get("/test", (req, res) => {
-  res.send("working");
-=======
 app.post("/hello", async (req, res) => {
   res.send("hello");
->>>>>>> Stashed changes
 });
 
 if (process.env.NODE_ENV === "production") {
