@@ -1,9 +1,10 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { useCookies } from "react-cookie";
 import styled from "styled-components";
 import GoogleAuth from "../googleAuth/GoogleAuth";
 import { Form, Formik, ErrorMessage, Field } from "formik";
 import logo from "../../images/Logo.svg";
+import ReCAPTCHA from "react-google-recaptcha";
 import {
   initialValues,
   onSubmit,
@@ -11,11 +12,13 @@ import {
   validationSchema,
 } from "./loginValidatoin";
 import { useNavigate, Navigate, useHistory } from "react-router-dom";
+import { ref } from "yup";
 
 function LoginModal({ Open }) {
   const navigate = useNavigate();
   const [error, setError] = useState("");
   const [cookie, setCookie] = useCookies(["accessToken"]);
+  const reRef = useRef();
   const updateCookie = (props) => {
     let expires = new Date();
     expires.setTime(expires.getTime() + 86400000);
@@ -31,10 +34,18 @@ function LoginModal({ Open }) {
 
   return (
     <LoginPopup>
+      <ReCAPTCHA
+        sitekey="6LeUN_kfAAAAACDh5TfxEN7kh1QeInKj2OV9lthj"
+        size="invisible"
+        ref={reRef}
+      />
       <Formik
         initialValues={initialValues}
-        onSubmit={(values) => {
-          onSubmit(values)
+        onSubmit={async (values) => {
+          const recaptchaToken = await reRef.current.executeAsync(); // to generate the recaptcha token
+          reRef.current.reset(); // to regenerate the token once data changes
+          console.log(recaptchaToken);
+          onSubmit(values, recaptchaToken)
             .then((res) => {
               const [
                 id,
@@ -79,19 +90,11 @@ function LoginModal({ Open }) {
           {error.length > 0 && <p>{error}</p>}
           <Lable>Email</Lable>
           <ErrorMessage name="email" />
-          <Field
-            name="email"
-            type="email"
-            style={inputStyle}
-          />
+          <Field name="email" type="email" style={inputStyle} />
 
           <Lable>Password</Lable>
           <ErrorMessage name="password" />
-          <Field
-            name="password"
-            type="password"
-            style={inputStyle}
-          />
+          <Field name="password" type="password" style={inputStyle} />
 
           <Submit>Login</Submit>
         </Form>

@@ -18,7 +18,7 @@ export const COLUMNS = [
     Header: "Date",
     accessor: "serviceDate",
     Cell: ({ value }) => {
-      return format(new Date(value), "dd/mm/yy");
+      return format(new Date(value), "dd-MM-yyyy");
     },
   },
   {

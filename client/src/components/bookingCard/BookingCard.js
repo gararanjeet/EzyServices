@@ -46,7 +46,7 @@ function BookingCard({ info, refresh }) {
         <Subtitle>{subService}</Subtitle>
         <Bookinguid>{bookingUid}</Bookinguid>
         <Slot>
-          <span>{format(new Date(serviceDate), "dd-mm-yy")}</span>
+          <span>{format(new Date(serviceDate), "dd-MM-yy")}</span>
           <span>{slot}</span>
         </Slot>
         <Status>{status}</Status>

@@ -62,8 +62,8 @@ function BookingManagement() {
           token: `Barear ${cookie.token}`,
         },
       });
-      const formatedData = DateFormat(result.data);
-      setData(formatedData);
+      // const formatedData = DateFormat(result.data);
+      setData(result.data);
     };
     fetchData();
   }, [refresh]);

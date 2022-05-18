@@ -1,5 +1,6 @@
 import React, { useMemo, useState } from "react";
-import { useTable, usePagination } from "react-table";
+import { useTable, usePagination, useSortBy } from "react-table";
+import { AiOutlineDown, AiOutlineUp } from "react-icons/ai";
 // import { COLUMNS } from "./columns";
 // import MOCK_DATA from "./MOCK_DATA.json";
 import styled from "styled-components";
@@ -35,7 +36,7 @@ export const Table = ({
             className="danger"
             onClick={() => {
               const email = row.cells[3].value;
-              deleteUser(email)
+              deleteUser(email);
             }}
           >
             Delete
@@ -82,6 +83,7 @@ export const Table = ({
     },
     ViewDetails === true && tableHooks,
     !ViewDetails && deleteHook,
+    useSortBy,
     usePagination
   );
 
@@ -111,8 +113,21 @@ export const Table = ({
               {...headerGroup.getHeaderGroupProps()}
             >
               {headerGroup.headers.map((column) => (
-                <TableHeader {...column.getHeaderProps()}>
+                <TableHeader
+                  {...column.getHeaderProps(column.getSortByToggleProps())}
+                >
                   {column.render("Header")}
+                  <span>
+                    {column.isSorted ? (
+                      column.isSortedDesc ? (
+                        <AiOutlineDown ></AiOutlineDown>
+                      ) : (
+                        <AiOutlineUp></AiOutlineUp>
+                      )
+                    ) : (
+                      ""
+                    )}
+                  </span>
                 </TableHeader>
               ))}
             </TableRow>

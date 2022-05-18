@@ -10,6 +10,7 @@ function BookingDetails({ data, open, assign, setRefresh, HandleDelete }) {
   const [phone, setPhone] = useState("");
   const [cookie] = useCookies();
   const [rating, setRating] = useState(0);
+  const [popup, setPopup] = useState(false);
 
   const SelectProvider = (id) => {
     try {
@@ -41,7 +42,9 @@ function BookingDetails({ data, open, assign, setRefresh, HandleDelete }) {
 
   useEffect(() => {
     if (data.rating === undefined && rating > 0) {
+      setPopup(true);
       rateService();
+      setTimeout(() => setPopup(false), 2000);
     }
   }, [rating]);
 
@@ -171,7 +174,20 @@ function BookingDetails({ data, open, assign, setRefresh, HandleDelete }) {
           data.status
         ) && <Button onClick={(e) => HandleDelete(e)}>Cancel</Button>}
       {data.status.toLowerCase() === "completed" && (
-        <Rate rating={data.rating || rating} onRating={setRating}></Rate>
+        <>
+          {popup ? (
+            <Popup>Thanks for u r rating!!!</Popup>
+          ) : (
+            <>
+              {data.rating || rating ? (
+                <Key className="center-align">Rating!!!</Key>
+              ) : (
+                <Key className="center-align">Rate Us!!!</Key>
+              )}
+              <Rate rating={data.rating || rating} onRating={setRating}></Rate>
+            </>
+          )}
+        </>
       )}
     </Container>
   );
@@ -195,6 +211,9 @@ const Key = styled.p`
   flex: 0.75;
   padding-right: 2rem;
   text-align: right;
+  &.center-align {
+    text-align: center;
+  }
 `;
 
 const Value = styled.p`
@@ -239,4 +258,12 @@ const Button = styled.button`
     background-color: #565656;
     color: white;
   }
+`;
+
+const Popup = styled.p`
+  height: 4rem;
+  font-size: 1.2rem;
+  font-weight: bold;
+  text-align: center;
+  line-height: 4rem;
 `;

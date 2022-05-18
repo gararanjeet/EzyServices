@@ -25,7 +25,13 @@ const Rate = ({ count, rating, color, onRating }) => {
           key={idx}
           className="cursor-pointer"
           icon="star"
-          onClick={rating > 0 ? null : () => onRating(idx)}
+          onClick={
+            rating > 0
+              ? null
+              : () => {
+                  onRating(idx);
+                }
+          }
           style={{ color: getColor(idx), fontSize: "2rem", cursor: "pointer" }}
           onMouseEnter={rating > 0 ? null : () => setHoverRating(idx)}
           onMouseLeave={rating > 0 ? null : () => setHoverRating(0)}
