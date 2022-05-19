@@ -12,6 +12,11 @@ const bookings_list = async (req, res) => {
         },
       },
       {
+        $sort: {
+          createdAt: -1,
+        },
+      },
+      {
         $project: {
           _id: 1,
           bookingUid: 1,
@@ -26,6 +31,8 @@ const bookings_list = async (req, res) => {
           serviceDate: 1,
           slot: 1,
           status: 1,
+          price: 1,
+          paymentId: 1,
         },
       },
     ]);

@@ -93,8 +93,8 @@ function NavBar() {
                 </Link>
               )}
               {user === "true" && (
-                <Link to="/viewBookings" style={linkStyle}>
-                  <NavItem>Booking Status</NavItem>
+                <Link to="/AllBookings" style={linkStyle}>
+                  <NavItem>My Bookings</NavItem>
                 </Link>
               )}
               {serviceProvider === "true" && (

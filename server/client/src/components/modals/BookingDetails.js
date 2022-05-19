@@ -2,18 +2,21 @@ import React, { useEffect, useMemo, useState } from "react";
 import styled from "styled-components";
 import axios from "../axios";
 import { useCookies } from "react-cookie";
+import Rate from "../starRating/StarRating";
+import { format } from "date-fns";
 
-function BookingDetails({ data, open, assign, setRefresh }) {
+function BookingDetails({ data, open, assign, setRefresh, HandleDelete }) {
   const [serviceProviders, setServiceProviders] = useState([]);
   const [serviceProvider, setServiceProvider] = useState([]);
   const [phone, setPhone] = useState("");
   const [cookie] = useCookies();
+  const [rating, setRating] = useState(0);
+  const [popup, setPopup] = useState(false);
 
   const SelectProvider = (id) => {
-    console.log("provider");
     try {
       console.log(id);
-      let provider = serviceProviders.filter((obj) => obj._id == id);
+      let provider = serviceProviders.filter((obj) => obj._id === id);
       setServiceProvider(provider[0]);
       setPhone(provider[0].phone);
     } catch {
@@ -22,12 +25,37 @@ function BookingDetails({ data, open, assign, setRefresh }) {
     }
   };
 
+  const rateService = async () => {
+    try {
+      const result = await axios.post(
+        "/Booking/rate",
+        {
+          id: data._id,
+          rating,
+        },
+        { headers: { token: `Barear ${cookie.token}` } }
+      );
+      data.rating = rating;
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  useEffect(() => {
+    if (data.rating === undefined && rating > 0) {
+      setPopup(true);
+      rateService();
+      setTimeout(() => setPopup(false), 2000);
+    }
+  }, [rating]);
+
   // const name = data.service;
   const fetchData = async () => {
     const result = await axios.get("/ServiceProvider/list", {
       headers: { token: `Barear ${cookie.token}` },
       params: { service: data.service },
     });
+    console.log(result, "service provider");
     setServiceProviders(result.data);
   };
 
@@ -60,10 +88,7 @@ function BookingDetails({ data, open, assign, setRefresh }) {
   useEffect(() => {
     if (assign) fetchData();
   }, [assign]);
-
-  console.log(data);
-  data = data[0];
-  console.log(data);
+  console.log(assign);
   return (
     <Container>
       <Title>{assign ? "Job Card" : "Booking Details"}</Title>
@@ -89,7 +114,7 @@ function BookingDetails({ data, open, assign, setRefresh }) {
       </Row>
       <Row>
         <Key>Date :</Key>
-        <Value>{data.serviceDate}</Value>
+        <Value>{format(new Date(data.serviceDate), "dd-MM-yy")}</Value>
       </Row>
       <Row>
         <Key>Address :</Key>
@@ -107,6 +132,16 @@ function BookingDetails({ data, open, assign, setRefresh }) {
         <Key>Sub service :</Key>
         <Value>{data.subService}</Value>
       </Row>
+      <Row>
+        <Key>Price :</Key>
+        <Value>{data.price}</Value>
+      </Row>
+      {data.paymentId && (
+        <Row>
+          <Key>Payment Id :</Key>
+          <Value>{data.paymentId}</Value>
+        </Row>
+      )}
       {!assign && (
         <Row>
           <Key>Assigned to :</Key>
@@ -141,6 +176,26 @@ function BookingDetails({ data, open, assign, setRefresh }) {
           <Button onClick={onSubmit}>Assign</Button>
         </>
       )}
+      {HandleDelete &&
+        ["PENDING", "AWAITING", "ACCEPTED", "REJECTED"].includes(
+          data.status
+        ) && <Button onClick={(e) => HandleDelete(e)}>Cancel</Button>}
+      {data.status.toLowerCase() === "completed" && (
+        <>
+          {popup ? (
+            <Popup>Thanks for u r rating!!!</Popup>
+          ) : (
+            <>
+              {data.rating || rating ? (
+                <Key className="center-align">Rating!!!</Key>
+              ) : (
+                <Key className="center-align">Rate Us!!!</Key>
+              )}
+              <Rate rating={data.rating || rating} onRating={setRating}></Rate>
+            </>
+          )}
+        </>
+      )}
     </Container>
   );
 }
@@ -163,6 +218,9 @@ const Key = styled.p`
   flex: 0.75;
   padding-right: 2rem;
   text-align: right;
+  &.center-align {
+    text-align: center;
+  }
 `;
 
 const Value = styled.p`
@@ -203,4 +261,16 @@ const Button = styled.button`
   border-radius: 5px;
   margin-top: 1rem;
   cursor: pointer;
+  :hover {
+    background-color: #565656;
+    color: white;
+  }
+`;
+
+const Popup = styled.p`
+  height: 4rem;
+  font-size: 1.2rem;
+  font-weight: bold;
+  text-align: center;
+  line-height: 4rem;
 `;

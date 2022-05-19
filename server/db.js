@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 require("dotenv").config();
 
 // replace the uri string with your connection string.
-const uri = process.env.DB_LOCAL_URL;
+const uri = process.env.DB_URL;
 try {
   mongoose.connect(
     uri,

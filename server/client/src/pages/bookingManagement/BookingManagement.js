@@ -26,7 +26,7 @@ function BookingManagement() {
   const [dateFilter, setDateFilter] = useState("");
   const [showDetails, setShowDetails] = useState(false);
   const [detailsId, setDetailsId] = useState("");
-  const [details, setDetails] = useState();
+  const [details, setDetails] = useState([]);
   const [assign, setAssignment] = useState(false);
   const [refresh, setRefresh] = useState(0);
   const [cookie] = useCookies();
@@ -62,8 +62,8 @@ function BookingManagement() {
           token: `Barear ${cookie.token}`,
         },
       });
-      const formatedData = DateFormat(result.data);
-      setData(formatedData);
+      // const formatedData = DateFormat(result.data);
+      setData(result.data);
     };
     fetchData();
   }, [refresh]);
@@ -114,8 +114,9 @@ function BookingManagement() {
             setAssignment(false);
           }}
         >
+          {console.log(details, "its bookingManagement")}
           <BookingDetails
-            data={details}
+            data={details[0]}
             open={setShowDetails}
             assign={assign}
             setRefresh={setRefresh}

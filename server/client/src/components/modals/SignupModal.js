@@ -104,7 +104,7 @@ const styleInput = {
   display: "block",
   fontSize: "1.2rem",
   padding: "0.5em",
-  color: "#d5d421",
+  color: "white",
   width: "85%",
   marginLeft: "1.5em",
   marginBottom: "2rem",
@@ -123,6 +123,7 @@ const Submit = styled.button`
   border-radius: 0.5rem;
   background-color: #d5d421;
   :hover {
-    color: #878787;
+    color: #565656;
+    cursor: pointer;
   }
 `;

@@ -1,5 +1,5 @@
+import { format } from "date-fns";
 import styled from "styled-components";
-import Div from "../../components/modals/JobCard";
 
 export const COLUMNS = [
   {
@@ -17,6 +17,9 @@ export const COLUMNS = [
   {
     Header: "Date",
     accessor: "serviceDate",
+    Cell: ({ value }) => {
+      return format(new Date(value), "dd-MM-yyyy");
+    },
   },
   {
     Header: "Slot",
@@ -26,7 +29,6 @@ export const COLUMNS = [
     Header: "Status",
     accessor: "status",
   },
-
 ];
 
 const Button = styled.button`

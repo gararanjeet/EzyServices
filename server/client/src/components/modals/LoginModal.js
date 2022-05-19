@@ -1,8 +1,10 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { useCookies } from "react-cookie";
 import styled from "styled-components";
 import GoogleAuth from "../googleAuth/GoogleAuth";
 import { Form, Formik, ErrorMessage, Field } from "formik";
+import logo from "../../images/Logo.svg";
+import ReCAPTCHA from "react-google-recaptcha";
 import {
   initialValues,
   onSubmit,
@@ -10,11 +12,13 @@ import {
   validationSchema,
 } from "./loginValidatoin";
 import { useNavigate, Navigate, useHistory } from "react-router-dom";
+import { ref } from "yup";
 
 function LoginModal({ Open }) {
   const navigate = useNavigate();
   const [error, setError] = useState("");
   const [cookie, setCookie] = useCookies(["accessToken"]);
+  const reRef = useRef();
   const updateCookie = (props) => {
     let expires = new Date();
     expires.setTime(expires.getTime() + 86400000);
@@ -30,10 +34,18 @@ function LoginModal({ Open }) {
 
   return (
     <LoginPopup>
+      <ReCAPTCHA
+        sitekey="6LeUN_kfAAAAACDh5TfxEN7kh1QeInKj2OV9lthj"
+        size="invisible"
+        ref={reRef}
+      />
       <Formik
         initialValues={initialValues}
-        onSubmit={(values) => {
-          onSubmit(values)
+        onSubmit={async (values) => {
+          const recaptchaToken = await reRef.current.executeAsync(); // to generate the recaptcha token
+          reRef.current.reset(); // to regenerate the token once data changes
+          console.log(recaptchaToken);
+          onSubmit(values, recaptchaToken)
             .then((res) => {
               const [
                 id,
@@ -66,7 +78,10 @@ function LoginModal({ Open }) {
         validationSchema={validationSchema}
       >
         <Form style={{ textAlign: "center" }}>
-          <Heading>Login </Heading>
+          <HeadingContainer>
+            <Logo src={logo} alt="logo" />
+            <Heading>Login</Heading>
+          </HeadingContainer>
           <GoogleAuth
             body="Login using Google"
             Open={Open}
@@ -75,21 +90,11 @@ function LoginModal({ Open }) {
           {error.length > 0 && <p>{error}</p>}
           <Lable>Email</Lable>
           <ErrorMessage name="email" />
-          <Field
-            name="email"
-            type="email"
-            placeholder="email@gmail.com"
-            style={inputStyle}
-          />
+          <Field name="email" type="email" style={inputStyle} />
 
           <Lable>Password</Lable>
           <ErrorMessage name="password" />
-          <Field
-            name="password"
-            type="password"
-            placeholder="password"
-            style={inputStyle}
-          />
+          <Field name="password" type="password" style={inputStyle} />
 
           <Submit>Login</Submit>
         </Form>
@@ -104,11 +109,20 @@ const LoginPopup = styled.div`
   color: white;
 `;
 
-const Heading = styled.h1`
-  text-align: center;
-  font-size: 3rem;
+const HeadingContainer = styled.div`
+  display: flex;
+  justify-content: flex-start;
   margin: 2rem 0;
   margin-bottom: 3rem;
+`;
+
+const Logo = styled.img`
+  margin-right: 1rem;
+  width: 10rem;
+`;
+const Heading = styled.h1`
+  text-align: center;
+  font-size: 3.5rem;
 `;
 
 const Lable = styled.label`
@@ -123,7 +137,7 @@ const inputStyle = {
   display: "block",
   fontSize: "1.3rem",
   padding: "0.5em",
-  color: "#d5d421",
+  color: "white",
   width: "85%",
   marginLeft: "1.5em",
   marginBottom: "2rem",
@@ -142,6 +156,7 @@ const Submit = styled.button`
   border-radius: 0.5rem;
   background-color: #d5d421;
   :hover {
-    color: #878787;
+    color: #565656;
+    cursor: pointer;
   }
 `;

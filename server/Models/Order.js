@@ -49,6 +49,14 @@ const orderSchema = new Schema(
       type: String,
       reqruied: true,
     },
+    paymentId: {
+      type: String,
+      reqruied: true,
+    },
+    orderId: {
+      type: String,
+      required: true,
+    },
     status: {
       type: String,
       enum: [
@@ -65,6 +73,7 @@ const orderSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: "account",
     },
+    rating: Number,
   },
   { timestamps: true }
 );

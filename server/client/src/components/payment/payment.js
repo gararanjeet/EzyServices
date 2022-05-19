@@ -27,7 +27,9 @@ const displayRazorpay = async (info, submit, orderUrl, token) => {
     image: logo,
     order_id: data.data.id,
     handler: (obj) => {
-      console.log(obj);
+      info.paymentId = obj.razorpay_payment_id;
+      info.orderId = obj.razorpay_order_id;
+      console.log(info);
       submit(info);
     },
   };

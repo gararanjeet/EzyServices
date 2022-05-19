@@ -1,12 +1,17 @@
+const { default: mongoose } = require("mongoose");
 const { db } = require("../../db");
 const Order = require("../../Models/Order");
 //bookings_list_user
 const bookings_list_user = async (req, res) => {
-  const { id } = req.query;//for frontend
+  const { id } = req.query; //for frontend
   // const { id } = req.body;//for postman
   try {
-    console.log("here");
     const result = await Order.aggregate([
+      {
+        $match: {
+          accountId: mongoose.Types.ObjectId(id),
+        },
+      },
       {
         $lookup: {
           from: "accounts",
@@ -16,16 +21,29 @@ const bookings_list_user = async (req, res) => {
         },
       },
       {
+        $sort: {
+          createdAt: -1,
+        },
+      },
+      {
         $project: {
           _id: 1,
           bookingUid: 1,
+          name: 1,
+          phone: 1,
+          address: 1,
+          email: 1,
+          assignedTo: 1,
+          assignedName: { $first: "$assigned.userName" },
+          service: 1,
+          subService: 1,
           serviceDate: 1,
           slot: 1,
           status: 1,
-          service: 1,
-          subService: 1,
-          assignedName: { $first: "$assigned.userName" },
           price: 1,
+          rating: 1,
+          paymentId: 1,
+          createdAt: 1,
         },
       },
     ]);
@@ -35,15 +53,6 @@ const bookings_list_user = async (req, res) => {
     console.log(err);
     res.status(500).send(err);
   }
-  // db.query(
-  //   "SELECT b.id as booking_id, b.booking_uid, b.service_date, slot.start, slot.end, s.name as 'service', sub.name as sub_service, sub.price, a.user_name as 'assigned', b.status FROM booking as b LEFT JOIN slot on slot.id = b.slot_id LEFT JOIN service as s on s.id = b.service_id LEFT JOIN sub_service sub on sub.id = b.sub_service_id LEFT JOIN account as a on a.id = b.assigned_to  WHERE b.account_id = ?",
-  //   [id],
-  //   (err, result) => {
-  //     if (err) return res.status(500).send(err);
-  //     // console.table(result);
-  //     res.send(result);
-  //   }
-  // );
 };
 
 module.exports = { bookings_list_user };
