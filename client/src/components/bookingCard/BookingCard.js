@@ -89,6 +89,7 @@ const Card = styled.div`
   }
   &.pending {
     background-color: #a4d7e1;
+    box-shadow: 0 0 1rem #a4d7e1;
   }
   :hover {
     transform: scale(1.03);

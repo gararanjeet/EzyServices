@@ -7,14 +7,11 @@ const OrderStatus = require("../../Models/OrderStatus");
 const Service = require("../../Models/Service");
 const Slot = require("../../Models/Slot");
 const SubService = require("../../Models/SubService");
+const { customAlphabet } = require("nanoid");
 
 const getId = () => {
-  const date = new Date();
-  const day = date.getDate();
-  const month = date.getMonth() + 1;
-  const hours = date.getHours();
-  const minutes = date.getMinutes();
-  return `1V` + day + month + hours + minutes;
+  const nanoid = customAlphabet("1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ", 10);
+  return `1V-${nanoid(10)}`;
 };
 // booking_vehicleWaterService_create
 const booking_vehicleWaterService_create = async (req, res) => {

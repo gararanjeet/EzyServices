@@ -12,6 +12,11 @@ const bookings_list = async (req, res) => {
         },
       },
       {
+        $sort: {
+          createdAt: -1,
+        },
+      },
+      {
         $project: {
           _id: 1,
           bookingUid: 1,

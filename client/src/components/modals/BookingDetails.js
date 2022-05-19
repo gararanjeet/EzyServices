@@ -3,6 +3,7 @@ import styled from "styled-components";
 import axios from "../axios";
 import { useCookies } from "react-cookie";
 import Rate from "../starRating/StarRating";
+import { format } from "date-fns";
 
 function BookingDetails({ data, open, assign, setRefresh, HandleDelete }) {
   const [serviceProviders, setServiceProviders] = useState([]);
@@ -113,7 +114,7 @@ function BookingDetails({ data, open, assign, setRefresh, HandleDelete }) {
       </Row>
       <Row>
         <Key>Date :</Key>
-        <Value>{data.serviceDate}</Value>
+        <Value>{format(new Date(data.serviceDate), "dd-MM-yy")}</Value>
       </Row>
       <Row>
         <Key>Address :</Key>

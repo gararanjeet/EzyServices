@@ -68,7 +68,7 @@ const Title = styled.h1`
 const Container = styled.div`
   width: 90%;
   margin: auto auto;
-  margin-top: 3rem;
+  /* margin-top: 2rem; */
   width: min(90%, 1400px);
   display: flex;
   justify-content: center;
