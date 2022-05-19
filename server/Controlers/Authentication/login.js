@@ -29,12 +29,13 @@ const googleLogin = async (req, res) => {
   const role = "USER";
   const { email, username } = req.body;
   try {
-    const user = await Account.find({ email });
-    if (user[0]?.length > 0 && user[0].password == undefined) {
-      const { id, type, role } = user[0];
+    const user = await Account.findOne({ email });
+    if (user && user?.password == undefined) {
+      console.log("came here");
+      const { id, type, role } = user;
       const token = createToken({ id, type, role });
       return res.send({ id, type, role, token });
-    } else if (user.length === 0) {
+    } else if (user === null) {
       const account = new Account({
         userName: username,
         email,
@@ -52,8 +53,6 @@ const googleLogin = async (req, res) => {
       const token = createToken({ id, type, role });
       return res.send({ id, type, role, token });
     }
-    console.log(user.length);
-    res.send("hello");
   } catch (err) {
     console.log(err);
     res.status(500).send(err);
