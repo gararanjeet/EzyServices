@@ -6,8 +6,6 @@ const bookings_list_user = async (req, res) => {
   const { id } = req.query; //for frontend
   // const { id } = req.body;//for postman
   try {
-    console.log("here");
-    console.log(id);
     const result = await Order.aggregate([
       {
         $match: {
@@ -44,6 +42,7 @@ const bookings_list_user = async (req, res) => {
           status: 1,
           price: 1,
           rating: 1,
+          paymentId: 1,
           createdAt: 1,
         },
       },

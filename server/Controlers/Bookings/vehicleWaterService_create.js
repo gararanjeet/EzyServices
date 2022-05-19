@@ -26,6 +26,8 @@ const booking_vehicleWaterService_create = async (req, res) => {
     slot,
     address,
     price,
+    paymentId,
+    orderId,
   } = req.body;
   try {
     const user = await Account.findOne({ _id: user_id });
@@ -44,6 +46,8 @@ const booking_vehicleWaterService_create = async (req, res) => {
       email,
       status: "PENDING",
       price,
+      paymentId,
+      orderId,
     });
 
     const instered = await order.save();

@@ -49,6 +49,14 @@ const orderSchema = new Schema(
       type: String,
       reqruied: true,
     },
+    paymentId: {
+      type: String,
+      reqruied: true,
+    },
+    orderId: {
+      type: String,
+      required: true,
+    },
     status: {
       type: String,
       enum: [

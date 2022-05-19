@@ -136,6 +136,12 @@ function BookingDetails({ data, open, assign, setRefresh, HandleDelete }) {
         <Key>Price :</Key>
         <Value>{data.price}</Value>
       </Row>
+      {data.paymentId && (
+        <Row>
+          <Key>Payment Id :</Key>
+          <Value>{data.paymentId}</Value>
+        </Row>
+      )}
       {!assign && (
         <Row>
           <Key>Assigned to :</Key>
